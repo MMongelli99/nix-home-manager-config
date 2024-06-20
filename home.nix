@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ inputs, pkgs, ... }: # { config, pkgs, nixvim, ... }:
 
 { 
+  imports = [
+    inputs.nixvim.homeManagerModules.nixvim
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "michaelmongelli";
@@ -23,7 +27,7 @@
     # pkgs.hello
 
     neofetch
-    neovim
+    # neovim
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -70,11 +74,19 @@
   #
   #  /etc/profiles/per-user/michaelmongelli/etc/profile.d/hm-session-vars.sh
   #
-  home.sessionVariables = {
-    # EDITOR = "emacs";
-  };
+  
+  # home.sessionVariables = {
+  #  EDITOR = "nvim";
+  # };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  programs.nixvim = {
+    enable       = true;
+    viAlias      = true;
+    vimAlias     = true;
+    vimdiffAlias = true;
+  };
+  
 }
