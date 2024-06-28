@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }: # { config, pkgs, nixvim, ... }:
+{ config, pkgs, inputs, ... }:
 
 { 
   imports = [
@@ -27,7 +27,16 @@
     # pkgs.hello
 
     neofetch
-    # neovim
+    iterm2
+    tree
+
+    # TODO: to try in the future
+    # virtualbox  # not available on MacOS
+    # cached-nix-shell  # only avaialble on NixOS and Linux
+    # devbox  # wasn't a fan but might try again in the future
+    # zed-editor  # broken package, how to allow it?
+    # zsh-powerlevel10k  # does not add p10k command to environment
+    # meslo-lgs-nf   # how do I make use of fonts?
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -76,7 +85,7 @@
   #
   
   # home.sessionVariables = {
-  #  EDITOR = "nvim";
+  #   EDITOR = "nvim";
   # };
 
   # Let Home Manager install and manage itself.
@@ -84,9 +93,23 @@
 
   programs.nixvim = {
     enable       = true;
+    
     viAlias      = true;
     vimAlias     = true;
     vimdiffAlias = true;
+     
+    colorschemes.nord.enable = true;
+    # colorschemes.catppuccin.enable = true; 
+    # colorschemes.gruvbox.enable = true; 
+    # colorschemes.melange.enable = true;
+    # colorschemes.oxocarbon.enable = true;
+    # colorschemes.monokai-pro.enable = true;
+
   };
+
+  # basically copy the whole nvchad that is fetched from github to ~/.config/nvim
+  # xdg.configFile."nvim/" = {
+  #   source = (pkgs.callPackage ./nvchad/default.nix{}).nvchad;
+  # };
   
 }
