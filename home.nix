@@ -27,16 +27,18 @@
     # pkgs.hello
 
     neofetch
+    eza
     iterm2
-    tree
+    tmux
+    zsh-powerlevel10k
+    meslo-lgs-nf
+
 
     # TODO: to try in the future
     # virtualbox  # not available on MacOS
     # cached-nix-shell  # only avaialble on NixOS and Linux
     # devbox  # wasn't a fan but might try again in the future
     # zed-editor  # broken package, how to allow it?
-    # zsh-powerlevel10k  # does not add p10k command to environment
-    # meslo-lgs-nf   # how do I make use of fonts?
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -85,31 +87,58 @@
   #
   
   # home.sessionVariables = {
-  #   EDITOR = "nvim";
+  #   EDITOR = "emacs";
   # };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
   programs.nixvim = {
-    enable       = true;
-    
+    enable       = true; 
     viAlias      = true;
     vimAlias     = true;
     vimdiffAlias = true;
      
-    colorschemes.nord.enable = true;
-    # colorschemes.catppuccin.enable = true; 
-    # colorschemes.gruvbox.enable = true; 
-    # colorschemes.melange.enable = true;
-    # colorschemes.oxocarbon.enable = true;
-    # colorschemes.monokai-pro.enable = true;
+    # NixVim modules colorschemes: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
+    #colorschemes.nord.enable = true;
+    #plugins.lightline.enable = true;
+    
+    # vimPlugin colorschemes: https://github.com/NixOS/nixpkgs/blob/nixos-24.05/pkgs/applications/editors/vim/plugins/generated.nix
+    extraPlugins = [ pkgs.vimPlugins.pure-lua ];
+    colorscheme = "moonlight"; 
+    plugins.lightline.enable = false; # lightline only inherits colorschemes from Nixvim modules
 
   };
-
+  
   # basically copy the whole nvchad that is fetched from github to ~/.config/nvim
   # xdg.configFile."nvim/" = {
   #   source = (pkgs.callPackage ./nvchad/default.nix{}).nvchad;
   # };
-  
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    autocd = true;
+    syntaxHighlighting.enable = true;
+
+    initExtra = ''
+      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      source ~/.p10k.zsh
+    '';
+    
+    plugins = [
+      {
+        name = "powerlevel10k";
+        src = pkgs.zsh-powerlevel10k;
+        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      }
+    ];
+    
+    shellAliases = {
+      # executing iTerm2 from command line has problems when using Nix's default iTerm2 path
+      iTerm2 = "exec ~/Applications/Home Manager Apps/iTerm2.app/Contents/MacOS/iTerm2";
+    };
+  };
+
 }

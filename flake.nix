@@ -4,13 +4,14 @@
   inputs = {
     
     # Specify the source of Home Manager and Nixpkgs.
+
     nixpkgs-master.url     = "github:nixos/nixpkgs"; 
     nixpkgs-unstable.url   = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url     = "github:nixos/nixpkgs/nixos-24.05";
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     nixvim = {
