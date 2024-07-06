@@ -27,11 +27,17 @@
     # pkgs.hello
 
     neofetch
+    tree
     eza
     iterm2
     tmux
     zsh-powerlevel10k
     meslo-lgs-nf
+    ripgrep # needed for telescope.nvim
+
+    ghc
+
+    # haskellPackages.hell
 
 
     # TODO: to try in the future
@@ -98,14 +104,92 @@
     viAlias      = true;
     vimAlias     = true;
     vimdiffAlias = true;
+
+    opts = {
+      number = true;         # Show line numbers
+      # relativenumber = true; # Show relative line numbers
+
+      shiftwidth = 2;        # Tab width should be 2
+    };
      
     # NixVim modules colorschemes: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
-    #colorschemes.nord.enable = true;
-    #plugins.lightline.enable = true;
+    # colorschemes.vscode.enable = true;
+    # plugins.lightline.enable = true;
+
+    plugins = {
+
+      neo-tree = {
+	enable = true;
+	window.width = 30;
+	closeIfLastWindow = true;
+	extraOptions = {
+	  filesystem = {
+	    filtered_items = {
+	      visible = true;
+	    };
+	  };
+	};
+      };
+
+      telescope = {
+        enable = true;
+        settings = {
+          pickers.find_files = {
+            hidden = true;
+          };
+        };
+        keymaps = {
+          "<leader>ff" = {
+            action = "find_files";
+            options = {
+              desc = "Find File";
+            };
+          };
+          "<leader>fg" = {
+            action = "live_grep";
+            options = {
+              desc = "Find Via Grep";
+            };
+          };
+          "<leader>fb" = {
+            action = "buffers";
+            options = {
+              desc = "Find Buffers";
+            };
+          };
+          "<leader>fh" = {
+            action = "help_tags";
+            options = {
+              desc = "Find Help";
+            };
+          };
+        };
+      };
+
+    };
+    
+    globals = {
+      mapleader = " ";
+      maplocalleader = " ";
+    };
+
+    keymaps = [
+      {
+        key = "<leader>e";
+        action = "<CMD>Neotree toggle<CR>";
+        options.desc = "Toggle NeoTree";
+      }
+    ];
     
     # vimPlugin colorschemes: https://github.com/NixOS/nixpkgs/blob/nixos-24.05/pkgs/applications/editors/vim/plugins/generated.nix
-    extraPlugins = [ pkgs.vimPlugins.pure-lua ];
-    colorscheme = "moonlight"; 
+    extraPlugins = with pkgs.vimPlugins; [ 
+      neo-tree-nvim
+      # colorschemes
+      pure-lua          # moonlight
+      vim-code-dark     # codedark
+      vim-monokai-tasty # vim-monokai-tasty
+    ];
+    colorscheme = "vim-monokai-tasty"; 
     plugins.lightline.enable = false; # lightline only inherits colorschemes from Nixvim modules
 
   };
