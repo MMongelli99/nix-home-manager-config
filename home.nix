@@ -51,7 +51,7 @@
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
+    
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
@@ -112,11 +112,48 @@
       shiftwidth = 2;        # Tab width should be 2
     };
      
-    # NixVim modules colorschemes: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
+    # Nixvim modules colorschemes: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
     # colorschemes.vscode.enable = true;
     # plugins.lightline.enable = true;
 
     plugins = {
+
+      lsp = {
+        enable = true;
+
+        keymaps = {
+          silent = true;
+          # diagnostic = {
+          #   # Navigate in diagnostics
+          #   "<leader>k" = "goto_prev";
+          #   "<leader>j" = "goto_next";
+          # };
+
+          lspBuf = {
+            gd = "definition";
+            gD = "references";
+            gt = "type_definition";
+            gi = "implementation";
+            # K = "hover";
+            # "<F2>" = "rename";
+          };
+        };
+
+	# Nixvim LSP modules: https://github.com/nix-community/nixvim/blob/a5e9dbdef1530a76056db12387d489a68eea6f80/plugins/lsp/language-servers/default.nix#L57
+        servers = {
+	  pylsp.enable       = true; # Python
+	  nil-ls.enable      = true; # Nix
+	  bashls.enable      = true; # Bash
+	  html.enable        = true; # HTML
+	  cssls.enable       = true; # CSS
+	  tailwindcss.enable = true; # TailwindCSS
+	  jsonls.enable      = true; # JSON
+	  htmx.enable        = true; # HTMX
+	  sqls.enable        = true; # SQL
+	  lua-ls.enable      = true; # Lua
+	  marksman.enable    = true; # Markdown
+        };
+      };
 
       neo-tree = {
 	enable = true;
@@ -166,6 +203,49 @@
         };
       };
 
+      noice = {
+	enable = true;
+	notify = {
+	  enabled = false;
+	};
+	messages = {
+	  enabled = true; # Adds a padding-bottom to neovim statusline when set to false for some reason
+	};
+	lsp = {
+	  message = {
+	    enabled = true;
+	  };
+	  progress = {
+	    enabled = false;
+	    view = "mini";
+	  };
+	};
+	popupmenu = {
+	  enabled = true;
+	  backend = "nui";
+	};
+	format = {
+	  filter = {
+	    pattern = [ ":%s*%%s*s:%s*" ":%s*%%s*s!%s*" ":%s*%%s*s/%s*" "%s*s:%s*" ":%s*s!%s*" ":%s*s/%s*" ];
+	    icon = "";
+	    lang = "regex";
+	  };
+	  replace = {
+	    pattern = [
+	      ":%s*%%s*s:%w*:%s*"
+	      ":%s*%%s*s!%w*!%s*"
+	      ":%s*%%s*s/%w*/%s*"
+	      "%s*s:%w*:%s*"
+	      ":%s*s!%w*!%s*"
+	      ":%s*s/%w*/%s*"
+	    ];
+	    icon = "󱞪";
+	    lang = "regex";
+	  };
+	};
+      };
+
+
     };
     
     globals = {
@@ -184,6 +264,7 @@
     # vimPlugin colorschemes: https://github.com/NixOS/nixpkgs/blob/nixos-24.05/pkgs/applications/editors/vim/plugins/generated.nix
     extraPlugins = with pkgs.vimPlugins; [ 
       neo-tree-nvim
+      nvim-notify
       # colorschemes
       pure-lua          # moonlight
       vim-code-dark     # codedark
