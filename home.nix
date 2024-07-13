@@ -1,6 +1,13 @@
 { config, pkgs, inputs, ... }:
 
 { 
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = (_: true);
+    };
+  };
+
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
   ];
@@ -36,6 +43,7 @@
     ripgrep # needed for telescope.nvim
 
     ghc
+    warp-terminal
 
     # haskellPackages.hell
 
