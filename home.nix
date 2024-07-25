@@ -44,6 +44,9 @@
 
     ghc
     warp-terminal
+    neovide
+
+    # cached-nix-shell # not supported on MacOS
 
     # haskellPackages.hell
 
@@ -160,6 +163,7 @@
 	  sqls.enable        = true; # SQL
 	  lua-ls.enable      = true; # Lua
 	  marksman.enable    = true; # Markdown
+	  hls.enable         = true; # Haskell
         };
       };
 
