@@ -44,18 +44,14 @@
 
     ghc
     warp-terminal
-    neovide
-
-    # cached-nix-shell # not supported on MacOS
-
-    # haskellPackages.hell
-
+    neovide 
 
     # TODO: to try in the future
     # virtualbox  # not available on MacOS
     # cached-nix-shell  # only avaialble on NixOS and Linux
     # devbox  # wasn't a fan but might try again in the future
     # zed-editor  # broken package, how to allow it?
+    # haskellPackages.hell  # broken package, debug it?
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -277,6 +273,7 @@
     extraPlugins = with pkgs.vimPlugins; [ 
       neo-tree-nvim
       nvim-notify
+      markview-nvim
       # colorschemes
       pure-lua          # moonlight
       vim-code-dark     # codedark
