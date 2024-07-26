@@ -5,6 +5,7 @@
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
+      # allowBroken = true;
     };
   };
 
@@ -44,13 +45,14 @@
 
     ghc
     warp-terminal
-    neovide 
+    neovide
+    cached-nix-shell
+    nixfmt-rfc-style
 
     # TODO: to try in the future
-    # virtualbox  # not available on MacOS
-    # cached-nix-shell  # only avaialble on NixOS and Linux
-    # devbox  # wasn't a fan but might try again in the future
-    # zed-editor  # broken package, how to allow it?
+    # virtualbox            # not available on MacOS
+    # devbox                # wasn't a fan but might try again in the future
+    # zed-editor            # broken package, how to allow it?
     # haskellPackages.hell  # broken package, debug it?
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
@@ -124,6 +126,19 @@
     # plugins.lightline.enable = true;
 
     plugins = {
+
+      lualine = {
+        enable = true;
+	theme = "auto";
+	# sectionSeparators = {
+        #   left = "";
+        #   right = "";
+        # };
+        # componentSeparators = {
+        #   left = "";
+        #   right = "";
+        # };
+      };
 
       lsp = {
         enable = true;
@@ -274,13 +289,42 @@
       neo-tree-nvim
       nvim-notify
       markview-nvim
-      # colorschemes
+      ## colorschemes ##
       pure-lua          # moonlight
       vim-code-dark     # codedark
       vim-monokai-tasty # vim-monokai-tasty
+      poimandres-nvim   # poimandres
+      
+      # See GitHub - nixvim/docs/user-guide/faq.md
+      # This is straightforward too, you can add the following to `extraPlugins` for a plugin hosted on GitHub:
+      # (pkgs.vimUtils.buildVimPlugin {
+      #   name = "my-plugin";
+      #   version = "<version>";  # optional date of commit (YYYY-MM-DD), semantic versioning provided for release, or however you prefer to version it
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "<owner>";         # username of repo owner
+      #     repo  = "<repo>";          # name of repo
+      #     rev   = "<commit hash>";   # commit hash
+      #     hash  = "<nix NAR hash>";  # run `nix-prefetch-url --unpack <URL for .zip of repo at specified commit>`
+      #   };
+      #   meta.homepage = "<URL for docs/repo>";  # optional link to project docs or GitHub repo
+      # })
+
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "vague.nvim";
+	version = "1.2.0";
+        src = pkgs.fetchFromGitHub {
+          owner   = "vague2k";
+          repo    = "vague.nvim";
+          rev     = "8ebe3010d04bebdfd60d920d652996e360a79f33";
+          sha256  = "180crxd8k68hl6bycsd4c2aawbvpvnlxj8pkyprama9qpn1hginq";
+        };
+	meta.homepage = "https://github.com/vague2k/vague.nvim/";
+      }) # vague
+
     ];
+
     colorscheme = "vim-monokai-tasty"; 
-    plugins.lightline.enable = false; # lightline only inherits colorschemes from Nixvim modules
+    plugins.lightline.enable = false; # lightline only inherits colorschemes from Nixvim modules, lualine is a better alternative
 
   };
   
