@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 
 { 
   nixpkgs = {
@@ -11,7 +11,7 @@
 
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
-    ./nixvim.nix
+    ./modules/nixvim.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -36,13 +36,14 @@
     # pkgs.hello
 
     neofetch
-    tree
-    eza
+    trash-cli
+    eza  # used in custom zsh function `lt`
+    bat
     iterm2
     tmux
     zsh-powerlevel10k
     meslo-lgs-nf
-    ripgrep # needed for telescope.nvim
+    ripgrep  # needed for telescope.nvim
     warp-terminal
     neovide
     cached-nix-shell
@@ -69,7 +70,20 @@
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  home.file = {
+  home.file = 
+    let 
+      dotfiles = [ ".p10k.zsh" ".ghc/ghci.conf" ]; 
+    in
+      builtins.listToAttrs (
+        map
+	  (dotfile: { name  = dotfile; value = { source = ./dotfiles/${dotfile}; }; }) 
+	  dotfiles
+      );
+
+  /* let
+    p10k = ".p10k.zsh";
+    ghci = ".ghc/ghci.conf";
+  in {
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
@@ -81,19 +95,9 @@
     #   org.gradle.daemon.idletimeout=3600000
     # '';
 
-    ".ghc/ghci.conf".text = ''
-      -- multiline mode
-      :set +m
-      -- prompt for each line input
-      :set prompt  "𝝺 ❯ "
-      -- how to add color: https://wiki.haskell.org/GHCi_in_colour
-      :set prompt "\ESC[35m\STX𝝺 ❯ \ESC[m\STX"
-      -- prompt for each line of multiline input
-      :set prompt-cont "... "
-      -- add color to multiline continuation
-      :set prompt-cont "\ESC[35m\STX... \ESC[m\STX" 
-    '';
-  };
+    ${p10k}.source = ./dotfiles/${p10k};
+    ${ghci}.source = ./dotfiles/${ghci};
+  }; */
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -125,18 +129,19 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     autocd = true;
-    syntaxHighlighting.enable = true;
-
-    shellAliases = {
-      switch   = "home-manager switch";
-      git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
-    };
-
-    # oh-my-zsh = {
-    #   enable = true;
-    #   plugins = [ "git" "systemd" "rsync" "kubectl" ];
-    #   theme = "terminalparty";
-    # }; 
+    syntaxHighlighting.enable = true; 
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ 
+        "sudo"         # double tap ESC to rerun a command with sudo
+	"copypath"     # copy current working directory to clipboard
+	"copyfile"     # copy contents of file to clipboard
+	"copybuffer"   # copy command line buffer to clipboard
+	"dirhistory"   # navigate directories with ALT + arrow keys
+	"magic-enter"  # execute `git status` when hitting ENTER in a git repo
+      ]; 
+      # theme = "wezm";
+    }; 
     
     plugins = [
       {
@@ -144,12 +149,35 @@
         src = pkgs.zsh-powerlevel10k;
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
-    ];
+    ]; 
 
     initExtra = ''
-      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ~/.p10k.zsh
-    ''; 
+
+    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
+    # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+    source ~/.p10k.zsh  # your p10k config
+
+    # ohmyzsh magic-enter config
+    MAGIC_ENTER_GIT_COMMAND='git status'
+    MAGIC_ENTER_OTHER_COMMAND='eza -a'
+
+    ## custom utility functions ##
+
+    list-tree () {
+      if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
+        eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
+      else                                    # if arg is anything else
+        eza --tree --level 1 $@               # then run args with default level
+      fi
+    }
+
+    '';
+
+    shellAliases = {
+      switch   = "home-manager switch";
+      git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
+      lt       = "list-tree";  # defined in initExtra
+    };
 
   };
 
@@ -159,8 +187,8 @@
     userEmail = "mmongelli99@gmail.com";
     ignores = [ ".DS_Store" ];
     extraConfig = {
-        init.defaultBranch = "main";
-        push.autoSetupRemote = true;
+      init.defaultBranch = "main";
+      push.autoSetupRemote = true;
     };
   };
 

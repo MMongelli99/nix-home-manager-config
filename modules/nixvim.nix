@@ -41,6 +41,8 @@
         # };
       };
 
+      # transparent.enable = true;
+
       bufferline.enable = true;
 
       diffview.enable = true;
@@ -50,6 +52,7 @@
       neo-tree = {
 	enable = true;
 	window.width = 30;
+	window.position = "right";
 	closeIfLastWindow = true;
 	extraOptions = {
 	  filesystem = {
