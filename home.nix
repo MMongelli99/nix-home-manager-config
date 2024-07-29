@@ -37,11 +37,7 @@
 
     neofetch
     trash-cli
-<<<<<<< HEAD
-    eza  # used in custom zsh function `lt`
-=======
     eza # used in custom zsh function `lt`
->>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
     bat
     iterm2
     tmux
@@ -76,26 +72,7 @@
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-<<<<<<< HEAD
-  home.file = 
-    let 
-      dotfiles = [ ".p10k.zsh" ".ghc/ghci.conf" ]; 
-    in
-      builtins.listToAttrs (
-        map
-	  (dotfile: { name  = dotfile; value = { source = ./dotfiles/${dotfile}; }; }) 
-	  dotfiles
-      );
 
-  /* let
-    p10k = ".p10k.zsh";
-    ghci = ".ghc/ghci.conf";
-  in {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-=======
   home.file =
     let
       dotfiles = [
@@ -111,7 +88,6 @@
         };
       }) dotfiles
     );
->>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
 
   /*
     let
@@ -123,11 +99,6 @@
       # # symlink to the Nix store copy.
       # ".screenrc".source = dotfiles/screenrc;
 
-<<<<<<< HEAD
-    ${p10k}.source = ./dotfiles/${p10k};
-    ${ghci}.source = ./dotfiles/${ghci};
-  }; */
-=======
       # # You can also set the file content immediately.
       # ".gradle/gradle.properties".text = ''
       #   org.gradle.console=verbose
@@ -138,7 +109,6 @@
       ${ghci}.source = ./dotfiles/${ghci};
     };
   */
->>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -171,22 +141,7 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     autocd = true;
-<<<<<<< HEAD
-    syntaxHighlighting.enable = true; 
-    oh-my-zsh = {
-      enable = true;
-      plugins = [ 
-        "sudo"         # double tap ESC to rerun a command with sudo
-	"copypath"     # copy current working directory to clipboard
-	"copyfile"     # copy contents of file to clipboard
-	"copybuffer"   # copy command line buffer to clipboard
-	"dirhistory"   # navigate directories with ALT + arrow keys
-	"magic-enter"  # execute `git status` when hitting ENTER in a git repo
-      ]; 
-      # theme = "wezm";
-    }; 
-    
-=======
+
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
@@ -201,7 +156,6 @@
       # theme = "wezm";
     };
 
->>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
     plugins = [
       {
         name = "powerlevel10k";
@@ -212,25 +166,6 @@
 
     initExtra = ''
 
-<<<<<<< HEAD
-    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-    # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-    source ~/.p10k.zsh  # your p10k config
-
-    # ohmyzsh magic-enter config
-    MAGIC_ENTER_GIT_COMMAND='git status'
-    MAGIC_ENTER_OTHER_COMMAND='eza -a'
-
-    ## custom utility functions ##
-
-    list-tree () {
-      if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
-        eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
-      else                                    # if arg is anything else
-        eza --tree --level 1 $@               # then run args with default level
-      fi
-    }
-=======
       # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
       # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       source ~/.p10k.zsh  # your p10k config
@@ -248,20 +183,13 @@
           eza --tree --level 1 $@               # then run args with default level
         fi
       }
->>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
 
     '';
 
     shellAliases = {
-<<<<<<< HEAD
-      switch   = "home-manager switch";
-      git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
-      lt       = "list-tree";  # defined in initExtra
-=======
       switch = "home-manager switch";
       git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
       lt = "list-tree"; # defined in initExtra
->>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
     };
 
   };
