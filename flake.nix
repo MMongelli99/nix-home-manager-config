@@ -11,6 +11,10 @@
     nixpkgs.url      = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     nixvim.url       = "github:nix-community/nixvim";
+<<<<<<< HEAD
+=======
+    # mac-app-util.url = "github:hraban/mac-app-util";
+>>>>>>> 2ae5e85 (configured ohmyzsh, dotfiles, and some other stuff)
 
   };
 
