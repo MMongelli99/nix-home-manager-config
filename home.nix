@@ -5,7 +5,7 @@
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
-      # allowBroken = true;
+      allowBroken = true; # allow hell
     };
   };
 
@@ -35,20 +35,44 @@
     # # "Hello, world!" when run.
     # pkgs.hello
 
+    ## cli tools ##
     neofetch
     trash-cli
     eza # used in custom zsh function `lt`
     bat
-    iterm2
     tmux
     zsh-powerlevel10k
-    meslo-lgs-nf
-    ripgrep  # needed for telescope.nvim
+    nixfmt-rfc-style
+    cached-nix-shell
+    ripgrep # needed for telescope.nvim
+    ollama
+
+    ## applications ##
+
+    iterm2
     warp-terminal
     neovide
     utm
-    cached-nix-shell
-    nixfmt-rfc-style
+
+    ## languages ##
+
+    ghc
+    haskellPackages.cabal-install
+    haskellPackages.stack
+    # haskellPackages.hell
+
+    rustc
+    rustup
+    # cargo # included in rustup
+
+    python312Packages.python
+    python312Packages.pip
+
+    nodejs_22
+
+    ## fonts ##
+
+    meslo-lgs-nf
 
     # TODO: to try in the future
     # virtualbox            # not available on MacOS
@@ -75,9 +99,12 @@
 
   home.file =
     let
+      # Ensure each config file is present at its source path specified below.
+      # Home Manager will create/update the file in your home directory upon `home-manager switch`.
       dotfiles = [
         ".p10k.zsh"
         ".ghc/ghci.conf"
+        ".tmux.conf"
       ];
     in
     builtins.listToAttrs (
@@ -162,7 +189,7 @@
         src = pkgs.zsh-powerlevel10k;
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
-    ]; 
+    ];
 
     initExtra = ''
 
@@ -189,7 +216,9 @@
     shellAliases = {
       switch = "home-manager switch";
       git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
-      lt = "list-tree"; # defined in initExtra
+      lt = "list-tree";
+      # defined in initExtra
+      ai = "ollama run llama3.1";
     };
 
   };
