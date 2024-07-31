@@ -218,7 +218,7 @@
       git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
       lt = "list-tree";
       # defined in initExtra
-      ai = "ollama run llama3.1";
+      ai = "ollama serve & ollama run llama3.1";
     };
 
   };
