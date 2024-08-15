@@ -43,6 +43,7 @@
     tmux
     zsh-powerlevel10k
     nixfmt-rfc-style
+		nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
     cached-nix-shell
     ripgrep # needed for telescope.nvim
     ollama
@@ -214,7 +215,7 @@
     '';
 
     shellAliases = {
-      switch = "home-manager switch";
+      switch = "home-manager switch |& nom"; # make sure nix-output-monitor is installed for `nom`
       git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
       lt = "list-tree";
       # defined in initExtra
