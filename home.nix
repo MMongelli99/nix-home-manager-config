@@ -1,5 +1,12 @@
 { pkgs, inputs, ... }:
-
+let 
+  systemSpecificPackages = rec {
+		aarch64-darwin = with pkgs; [ 
+      iterm2
+		  arc-browser
+		];
+	};
+in
 {
   nixpkgs = {
     config = {
@@ -50,9 +57,9 @@
 
     ## applications ##
 
-    iterm2
     warp-terminal
     neovide
+		emacs # emacsMacport
     utm
 
     ## languages ##
@@ -93,7 +100,7 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-  ];
+  ] ++ systemSpecificPackages.${system};	
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
