@@ -229,6 +229,9 @@
       neo-tree-nvim
       nvim-notify
       markview-nvim
+			# statix
+			# ollama-nvim
+			# render-markdown
       (pkgs.vimUtils.buildVimPlugin {
         name = "nvim-scrollbar";
         version = "2024-06-03";

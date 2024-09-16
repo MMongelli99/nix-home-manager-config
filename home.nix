@@ -1,11 +1,11 @@
 { pkgs, inputs, ... }:
-let 
-  systemSpecificPackages = rec {
-		aarch64-darwin = with pkgs; [ 
+let
+  systemSpecificPackages = {
+    aarch64-darwin = with pkgs; [
       iterm2
-		  arc-browser
-		];
-	};
+      arc-browser
+    ];
+  };
 in
 {
   nixpkgs = {
@@ -37,70 +37,77 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+  home.packages =
+    with pkgs;
+    [
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
 
-    ## cli tools ##
-    neofetch
-    trash-cli
-    eza # used in custom zsh function `lt`
-    bat
-    tmux
-    zsh-powerlevel10k
-    nixfmt-rfc-style
-		nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
-    cached-nix-shell
-    ripgrep # needed for telescope.nvim
-    ollama
+      ## cli tools ##
+      neofetch
+      trash-cli
+      eza # used in custom zsh function `lt`
+      bat
+      ripgrep # needed for telescope.nvim
+      tmux
+      zsh-powerlevel10k
+      nixfmt-rfc-style
+      nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
+      cached-nix-shell
+      ollama
+			imagemagick # convert image formats on the command line
+      # open-webui
+      # devenv
+      # cachix
 
-    ## applications ##
+      ## applications ##
 
-    warp-terminal
-    neovide
-		emacs # emacsMacport
-    utm
+      neovide
+      emacs # emacsMacport
+      utm
+      # darwin.xcode
+      # element-desktop
+      # ladybird
+      # zen-browser
+      # thunderbird
+      # nyxt
 
-    ## languages ##
+      ## languages ##
 
-    ghc
-    haskellPackages.cabal-install
-    haskellPackages.stack
-    # haskellPackages.hell
+      # haskellPackages.hell
+      rustc
+      rustup
+      # cargo # included in rustup
+      python312Packages.python
+      python312Packages.pip
+      ghc
+      nodejs_22
 
-    rustc
-    rustup
-    # cargo # included in rustup
+      ## fonts ##
 
-    python312Packages.python
-    python312Packages.pip
+      meslo-lgs-nf
 
-    nodejs_22
+      # TODO: to try in the future
+      # virtualbox            # not available on MacOS
+      # devbox                # wasn't a fan but might try again in the future
+      # zed-editor            # broken package, how to allow it?
+      # haskellPackages.hell  # broken package, debug it?
 
-    ## fonts ##
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    meslo-lgs-nf
-
-    # TODO: to try in the future
-    # virtualbox            # not available on MacOS
-    # devbox                # wasn't a fan but might try again in the future
-    # zed-editor            # broken package, how to allow it?
-    # haskellPackages.hell  # broken package, debug it?
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ] ++ systemSpecificPackages.${system};	
+      # # You can also create simple shell scripts directly inside your
+      # # configuration. For example, this adds a command 'my-hello' to your
+      # # environment:
+      # (pkgs.writeShellScriptBin "my-hello" ''
+      #   echo "Hello, ${config.home.username}!"
+      # '')
+    ]
+    ++ systemSpecificPackages.${system};
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -115,14 +122,16 @@ in
         ".tmux.conf"
       ];
     in
-    builtins.listToAttrs (
-      map (dotfile: {
-        name = dotfile;
+      dotfiles
+      |> map (dotfile: {
+        name  = dotfile;
         value = {
-          source = ./dotfiles/${dotfile};
-        };
-      }) dotfiles
-    );
+				          source = ./dotfiles/${dotfile};
+				          recursive = true;
+									onChange = "echo 'Changes detected in dotfile ${dotfile}'";
+								};
+      })
+      |> builtins.listToAttrs;
 
   /*
     let
@@ -182,10 +191,9 @@ in
       enable = true;
       plugins = [
         "sudo" # double tap ESC to rerun a command with sudo
-        "copypath" # copy current working directory to clipboard
+        # "copypath" # copy current working directory to clipboard with ^O
         "copyfile" # copy contents of file to clipboard
-        "copybuffer" # copy command line buffer to clipboard
-        "dirhistory" # navigate directories with ALT + arrow keys
+        # "copybuffer" # copy command line buffer to clipboard
         "magic-enter" # execute `git status` when hitting ENTER in a git repo
       ];
       # theme = "wezm";
@@ -219,13 +227,23 @@ in
         fi
       }
 
+			search-git-log () {
+         git log --diff-filter=A -- ''${$1}
+			}
+
     '';
 
     shellAliases = {
       switch = "home-manager switch |& nom"; # make sure nix-output-monitor is installed for `nom`
+      home = "nvim ~/.config/home-manager/home.nix";
+			flake = "nvim ~/.config/home-manager/flake.nix";
       git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
+			git-count-lines = "git ls-files | xargs wc -l";
+			# git-log-search = "search-git-log";
       lt = "list-tree";
       # defined in initExtra
+      nix-shell-init = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
+      devenv-init = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
       ai = "ollama serve & ollama run llama3.1";
     };
 
