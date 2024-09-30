@@ -1,11 +1,17 @@
 { config, pkgs, ... }:
 
 {
+
+  # basically copy the whole nvchad that is fetched from github to ~/.config/nvim
+  # xdg.configFile."nvim/" = {
+  #   source = (pkgs.callPackage ./nvchad/default.nix{}).nvchad;
+  # };
+
   programs.nixvim = {
     enable = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
+    # viAlias = true;
+    # vimAlias = true;
+    # vimdiffAlias = true;
 
     opts = {
       number = true; # Show line numbers
@@ -14,14 +20,22 @@
     };
 
     # Nixvim colorscheme modules: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
-    # colorschemes.vscode.enable = true;
+    colorschemes.vscode = {
+		  enable = true;
+		  settings = {
+		    transparent = true;
+		  };
+		};
+
+    # Set colorscheme from extraPlugins
+    # colorscheme = "catppuccin"; # "vim-monokai-tasty";
 
     plugins = {
 
-      # navic = {
+		  # navic = {
       #   enable = true;
       #   lsp.autoAttach = true;
-      # }; 
+      # };
 
       # neoscroll = {
       #   enable = true;
@@ -30,7 +44,7 @@
 
       lualine = {
         enable = true;
-        theme = "auto";
+        settings.options.theme = "auto";
         # sectionSeparators = {
         #   left = "";
         #   right = "";
@@ -40,8 +54,6 @@
         #   right = "";
         # };
       };
-
-      # transparent.enable = true;
 
       bufferline.enable = true;
 
@@ -186,7 +198,7 @@
             gD = "references";
             gt = "type_definition";
             gi = "implementation";
-            # K = "hover";
+            K = "hover";
             # "<F2>" = "rename";
           };
         };
@@ -250,7 +262,8 @@
       vim-code-dark # codedark
       vim-monokai-tasty # vim-monokai-tasty
       poimandres-nvim # poimandres
-      (pkgs.vimUtils.buildVimPlugin {
+      # vague
+			(pkgs.vimUtils.buildVimPlugin {
         name = "vague.nvim";
         version = "1.2.0";
         src = pkgs.fetchFromGitHub {
@@ -260,11 +273,20 @@
           sha256 = "180crxd8k68hl6bycsd4c2aawbvpvnlxj8pkyprama9qpn1hginq";
         };
         meta.homepage = "https://github.com/vague2k/vague.nvim/";
-      }) # vague
+      })
+      # catppuccin
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "primeppuccin";
+        src = pkgs.fetchFromGitHub {
+          owner = "DanWlker";
+          repo = "primeppuccin";
+          rev = "dd28a21d83f8088074a66d66ae6508567b79a65a";
+          sha256 = "0aawd7vichvlsp7zw4h7vcm5dvs65bdkp4pnx0was9rz9i7lbdqf";
+        };
+        meta.homepage = "https://github.com/DanWlker/primeppuccin.git";
+      })
 
     ];
-
-    colorscheme = "vim-monokai-tasty";
 
     globals = {
       mapleader = " ";
@@ -293,25 +315,41 @@
     extraConfigLua = ''
       require("scrollbar").setup({
       	throttle_ms = 0,
-      		handle = {
-      				blend = 75, -- transparency %
-      				color = "#ffffff",
-      		},
-      		marks = {
-      			Cursor = {
-      				text = " ",
-      				-- text = "◼",
-      				-- color = "#aaaaaa",
-      			},
-      		},
-       })
+				handle = {
+						blend = 75, -- transparency %
+						color = "#ffffff",
+				},
+				marks = {
+					Cursor = {
+						text = " ",
+						-- text = "◼",
+						-- color = "#aaaaaa",
+					},
+				},
+      })
+
+      -- required default config
+      require("notify").setup({
+        background_colour = "#000000",
+			})
+
+		  if vim.g.neovide then
+        -- Put anything you want to happen only in Neovide here
+
+				-- Helper function for transparency formatting
+				local alpha = function()
+					return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
+				end
+				-- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
+				vim.g.neovide_transparency = 0.0
+				vim.g.transparency = 0.8
+				vim.g.neovide_background_color = "#0f1117" .. alpha()
+
+        vim.g.neovide_window_blurred = true
+				vim.g.neovide_floating_blur_amount_x = 2.0
+        vim.g.neovide_floating_blur_amount_y = 2.0
+			end
     '';
 
   };
-
-  # basically copy the whole nvchad that is fetched from github to ~/.config/nvim
-  # xdg.configFile."nvim/" = {
-  #   source = (pkgs.callPackage ./nvchad/default.nix{}).nvchad;
-  # };
-
 }

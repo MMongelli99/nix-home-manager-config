@@ -63,7 +63,6 @@ in
 
       ## applications ##
 
-      neovide
       emacs # emacsMacport
       utm
       # darwin.xcode
@@ -177,6 +176,28 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+	programs.neovide = {
+	  enable = true;
+    # empty attrset needs to be supplied for default settings
+		settings = {};
+		/* settings = {
+			fork = false;
+			frame = "full";
+			idle = true;
+			maximized = false;
+			no-multigrid = false;
+			srgb = false;
+			tabs = true;
+			theme = "auto";
+			title-hidden = true;
+
+			font = {
+				normal = [];
+				size = 14.0;
+			};
+	  }; */
+	};
 
   programs.fish.enable = true;
 
