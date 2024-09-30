@@ -45,7 +45,7 @@ in
       # pkgs.hello
 
       ## cli tools ##
-      neofetch
+      # neofetch # RIP
       trash-cli
       eza # used in custom zsh function `lt`
       bat
@@ -53,6 +53,7 @@ in
       tmux
       zsh-powerlevel10k
       nixfmt-rfc-style
+			nix-tree
       nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
       cached-nix-shell
       ollama
@@ -84,6 +85,8 @@ in
       python312Packages.pip
       ghc
       nodejs_22
+			nodePackages.ts-node
+			nodemon
 
       ## fonts ##
 
@@ -211,6 +214,8 @@ in
 	  }; */
 	};
 
+	programs.fastfetch.enable = true;
+
   programs.fish.enable = true;
 
   programs.zsh = {
@@ -278,6 +283,7 @@ in
       nix-shell-init = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
       devenv-init = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
       ai = "ollama serve & ollama run llama3.1";
+			ip = "ipconfig getifaddr en0";
     };
 
   };
