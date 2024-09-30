@@ -65,6 +65,8 @@ in
 
       emacs # emacsMacport
       utm
+			# code-cursor # not available on MacOS
+      # zed-editor # broken package
       # darwin.xcode
       # element-desktop
       # ladybird
@@ -90,7 +92,6 @@ in
       # TODO: to try in the future
       # virtualbox            # not available on MacOS
       # devbox                # wasn't a fan but might try again in the future
-      # zed-editor            # broken package, how to allow it?
       # haskellPackages.hell  # broken package, debug it?
 
       # # It is sometimes useful to fine-tune packages, for example, by applying
@@ -176,6 +177,17 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+	programs.vscode = {
+	  enable = true;
+		extensions = with pkgs.vscode-extensions; [
+      esbenp.prettier-vscode # format on save
+      visualstudioexptteam.vscodeintellicode # AI assisted suggestions
+			tim-koehler.helm-intellisense # type-inferenced suggestions
+			# asvetliakov.vscode-neovim # loaded with errors about lua
+			# vscodevim.vim # interfering with prettier and autosuggestions
+		];
+	};
 
 	programs.neovide = {
 	  enable = true;
