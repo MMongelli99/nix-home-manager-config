@@ -21,18 +21,18 @@
 
     # Nixvim colorscheme modules: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
     colorschemes.vscode = {
-		  enable = true;
-		  settings = {
-		    transparent = true;
-		  };
-		};
+      enable = true;
+      settings = {
+        transparent = true;
+      };
+    };
 
     # Set colorscheme from extraPlugins
-    # colorscheme = "catppuccin"; # "vim-monokai-tasty";
+    # colorscheme = "vim-monokai-tasty";
 
     plugins = {
 
-		  # navic = {
+      # navic = {
       #   enable = true;
       #   lsp.autoAttach = true;
       # };
@@ -240,14 +240,14 @@
     extraPlugins = with pkgs.vimPlugins; [
       neo-tree-nvim
       nvim-notify
-			# statix
-			# ollama-nvim
       vim-sneak
       render-markdown-nvim
       markdown-preview-nvim
       indent-blankline-nvim
       # headlines-nvim
       # markview-nvim
+      # statix
+      # ollama-nvim
       (pkgs.vimUtils.buildVimPlugin {
         name = "nvim-scrollbar";
         version = "2024-06-03";
@@ -267,7 +267,7 @@
       vim-monokai-tasty # vim-monokai-tasty
       poimandres-nvim # poimandres
       # vague
-			(pkgs.vimUtils.buildVimPlugin {
+      (pkgs.vimUtils.buildVimPlugin {
         name = "vague.nvim";
         version = "1.2.0";
         src = pkgs.fetchFromGitHub {
@@ -318,56 +318,56 @@
 
     extraConfigLua = ''
       require("scrollbar").setup({
-      	throttle_ms = 0,
-				handle = {
-						blend = 75, -- transparency %
-						color = "#ffffff",
-				},
-				marks = {
-					Cursor = {
-						text = " ",
-						-- text = "◼",
-						-- color = "#aaaaaa",
-					},
-				},
+        throttle_ms = 0,
+      	handle = {
+      	  blend = 75, -- transparency %
+      	  color = "#ffffff",
+      	},
+      	marks = {
+      	  Cursor = {
+      	    text = " ",
+      	    -- text = "◼",
+      	    -- color = "#aaaaaa",
+      	  },
+      	},
       })
 
-      -- required default config
+      -- nvim-notify --
       require("notify").setup({
         background_colour = "#000000",
-			})
+      })
 
       -- indent-blankline.nvim --
       require("ibl").setup()
 
       -- markdown-preview.nvim --
       use({
-	"iamcco/markdown-preview.nvim",
-	run = function() vim.fn["mkdp#util#install"]() end,
+      	"iamcco/markdown-preview.nvim",
+      	run = function() vim.fn["mkdp#util#install"]() end,
       })
       use({
-	"iamcco/markdown-preview.nvim",
-	run = "cd app && npm install",
-	setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
-	ft = { "markdown" },
+      	"iamcco/markdown-preview.nvim",
+      	run = "cd app && npm install",
+      	setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+      	ft = { "markdown" },
       })
 
-		  if vim.g.neovide then
+      if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
 
-				-- Helper function for transparency formatting
-				local alpha = function()
-					return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
-				end
-				-- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
-				vim.g.neovide_transparency = 0.0
-				vim.g.transparency = 0.8
-				vim.g.neovide_background_color = "#0f1117" .. alpha()
+      	-- Helper function for transparency formatting
+      	local alpha = function()
+      		return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
+      	end
+      	-- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
+      	vim.g.neovide_transparency = 0.0
+      	vim.g.transparency = 0.8
+      	vim.g.neovide_background_color = "#0f1117" .. alpha()
 
         vim.g.neovide_window_blurred = true
-				vim.g.neovide_floating_blur_amount_x = 2.0
+      	  vim.g.neovide_floating_blur_amount_x = 2.0
         vim.g.neovide_floating_blur_amount_y = 2.0
-			end
+      end
     '';
 
   };
