@@ -187,6 +187,7 @@ in
       esbenp.prettier-vscode # format on save
       visualstudioexptteam.vscodeintellicode # AI assisted suggestions
 			tim-koehler.helm-intellisense # type-inferenced suggestions
+			jnoortheen.nix-ide # nix language support
 			# asvetliakov.vscode-neovim # loaded with errors about lua
 			# vscodevim.vim # interfering with prettier and autosuggestions
 		];
