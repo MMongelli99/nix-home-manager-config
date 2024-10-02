@@ -341,6 +341,7 @@
       require("ibl").setup()
 
       -- markdown-preview.nvim --
+      --[[
       use({
       	"iamcco/markdown-preview.nvim",
       	run = function() vim.fn["mkdp#util#install"]() end,
@@ -351,6 +352,7 @@
       	setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
       	ft = { "markdown" },
       })
+      --]]
 
       if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
