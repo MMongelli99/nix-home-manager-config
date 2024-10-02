@@ -240,10 +240,12 @@
     extraPlugins = with pkgs.vimPlugins; [
       neo-tree-nvim
       nvim-notify
-      markview-nvim
 			# statix
 			# ollama-nvim
-			# render-markdown
+      render-markdown-nvim
+      markdown-preview-nvim
+      # headlines-nvim
+      # markview-nvim
       (pkgs.vimUtils.buildVimPlugin {
         name = "nvim-scrollbar";
         version = "2024-06-03";
@@ -332,6 +334,18 @@
       require("notify").setup({
         background_colour = "#000000",
 			})
+
+      -- markdown-preview.nvim --
+      use({
+	"iamcco/markdown-preview.nvim",
+	run = function() vim.fn["mkdp#util#install"]() end,
+      })
+      use({
+	"iamcco/markdown-preview.nvim",
+	run = "cd app && npm install",
+	setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+	ft = { "markdown" },
+      })
 
 		  if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
