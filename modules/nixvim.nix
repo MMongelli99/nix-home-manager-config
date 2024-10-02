@@ -242,6 +242,7 @@
       nvim-notify
 			# statix
 			# ollama-nvim
+      vim-sneak
       render-markdown-nvim
       markdown-preview-nvim
       # headlines-nvim
