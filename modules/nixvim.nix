@@ -245,6 +245,7 @@
       vim-sneak
       render-markdown-nvim
       markdown-preview-nvim
+      indent-blankline-nvim
       # headlines-nvim
       # markview-nvim
       (pkgs.vimUtils.buildVimPlugin {
@@ -335,6 +336,9 @@
       require("notify").setup({
         background_colour = "#000000",
 			})
+
+      -- indent-blankline.nvim --
+      require("ibl").setup()
 
       -- markdown-preview.nvim --
       use({
