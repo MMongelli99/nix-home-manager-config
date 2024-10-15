@@ -13,6 +13,10 @@ in
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
       allowBroken = true; # allow hell
+			permittedInsecurePackages = [
+				"cinny-4.2.1"
+				"cinny-unwrapped-4.2.1"
+			];
     };
   };
 
@@ -66,6 +70,7 @@ in
 
       emacs # emacsMacport
       utm
+			cinny-desktop
 			# code-cursor # not available on MacOS
       # zed-editor # broken package
       # darwin.xcode
