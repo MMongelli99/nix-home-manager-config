@@ -23,6 +23,7 @@ in
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
     ./modules/nixvim.nix
+		./modules/vscode.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -191,19 +192,6 @@ in
 	programs.direnv = {
 		enable = true;
 		nix-direnv.enable = true;
-	};
-
-	programs.vscode = {
-	  enable = true;
-		extensions = with pkgs.vscode-extensions; [
-      esbenp.prettier-vscode # format on save
-      visualstudioexptteam.vscodeintellicode # AI assisted suggestions
-			tim-koehler.helm-intellisense # type-inferenced suggestions
-			jnoortheen.nix-ide # nix language support
-			mkhl.direnv
-			# asvetliakov.vscode-neovim # loaded with errors about lua
-			# vscodevim.vim # interfering with prettier and autosuggestions
-		];
 	};
 
 	programs.neovide = {
