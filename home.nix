@@ -62,6 +62,8 @@ in
       cached-nix-shell
       ollama
 			imagemagick # convert image formats on the command line
+			sqlitebrowser
+			# sqlite-web # view SQLite database in web browser
       # open-webui
       # devenv
       # cachix
