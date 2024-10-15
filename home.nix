@@ -181,12 +181,17 @@ in
   #  /etc/profiles/per-user/michaelmongelli/etc/profile.d/hm-session-vars.sh
   #
 
-  # home.sessionVariables = {
-  #   EDITOR = "emacs";
-  # };
+  home.sessionVariables = {
+    EDITOR = "nvim";
+  };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+	programs.direnv = {
+		enable = true;
+		nix-direnv.enable = true;
+	};
 
 	programs.vscode = {
 	  enable = true;
@@ -195,6 +200,7 @@ in
       visualstudioexptteam.vscodeintellicode # AI assisted suggestions
 			tim-koehler.helm-intellisense # type-inferenced suggestions
 			jnoortheen.nix-ide # nix language support
+			mkhl.direnv
 			# asvetliakov.vscode-neovim # loaded with errors about lua
 			# vscodevim.vim # interfering with prettier and autosuggestions
 		];

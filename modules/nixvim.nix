@@ -13,6 +13,8 @@
     # vimAlias = true;
     # vimdiffAlias = true;
 
+		# defaultEditor = true;
+
     opts = {
       number = true; # Show line numbers
       relativenumber = true; # Show relative line numbers
@@ -244,6 +246,7 @@
       render-markdown-nvim
       markdown-preview-nvim
       indent-blankline-nvim
+			direnv-vim
       # headlines-nvim
       # markview-nvim
       # statix
