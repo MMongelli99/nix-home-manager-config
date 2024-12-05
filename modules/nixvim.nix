@@ -264,6 +264,17 @@
         };
         meta.homepage = "https://github.com/petertriho/nvim-scrollbar/";
       })
+			# (pkgs.vimUtils.buildVimPlugin {
+      #   name = "smear-cursor.nvim";
+			# 	version = "2024-11-25";
+			# 	src = pkgs.fetchFromGitHub {
+      #     owner = "sphamba";
+			# 		repo = "smear-cursor.nvim";
+			# 		rev = "d0a3aaeb7cd4ad4ead50c6d95fa48216364255e0";
+			# 		sha256 = "192jjjwnl4s6cpz69zqd4iz6d1dwd30bv8ig524dpg6afr8gnm8s";
+			# 	};
+			# 	meta.homepage = "https://github.com/sphamba/smear-cursor.nvim";
+			# })
 
       # colorschemes #
 
@@ -371,6 +382,9 @@
       	ft = { "markdown" },
       })
       --]]
+
+      -- smear-cursor.nvim --
+      -- require('smear_cursor').setup()
 
       if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
