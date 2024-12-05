@@ -321,7 +321,20 @@
       }
     ];
 
+		# extraConfigVim = ''
+    #   " mark col 80 with vertical line
+		# 	highlight ColorColumn ctermbg=gray
+    #   set colorcolumn=80
+		# '';
+
     extraConfigLua = ''
+      -- transparent background for all themes --
+		  vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'StatusLine', { bg = 'NONE' })
+
       require("scrollbar").setup({
         throttle_ms = 0,
       	handle = {
