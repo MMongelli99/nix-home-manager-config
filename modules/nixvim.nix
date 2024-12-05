@@ -296,6 +296,17 @@
 					sha256 = "w8bNUclsaQg/fwzFLfNM4WXZwb6efnLaUYasbIxjElY=";
 				};
 			})
+			(pkgs.vimUtils.buildVimPlugin {
+				pname = "vim-prisma";
+				version = "2023-01-24";
+				src = pkgs.fetchFromGitHub {
+					owner = "prisma";
+					repo = "vim-prisma";
+					rev = "95c5b25066efb34c75bce78698baa371fe0ee7c2";
+					sha256 = "046lpazz44f6b1lcvklaq1jl0sbyiklj6kcv580rrff89511nzsy";
+				};
+				meta.homepage = "https://github.com/prisma/vim-prisma/";
+			})
 
       # colorschemes #
 
