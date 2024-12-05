@@ -286,6 +286,16 @@
 				};
 				meta.homepage = "https://neovimcraft.com/plugin/mawkler/modicator.nvim/";
 			})
+			(pkgs.vimUtils.buildVimPlugin {
+			  name = "let-it-snow.nvim";
+				version = "2024-12-04";
+				src = pkgs.fetchFromGitHub {
+				  owner = "marcussimonsen";
+					repo = "let-it-snow.nvim";
+					rev = "7ff767f7b6e787989ca73ebcdcd0dd5ea483811a";
+					sha256 = "w8bNUclsaQg/fwzFLfNM4WXZwb6efnLaUYasbIxjElY=";
+				};
+			})
 
       # colorschemes #
 
@@ -403,6 +413,12 @@
       vim.o.cursorline = true
 			vim.cmd("highlight CursorLine guibg=NONE ctermbg=NONE") -- transparent cursor line
       vim.o.number = true
+
+      -- let-it-snow.nvim --
+      require("let-it-snow").setup({
+        snowflake_char = "\u{F313}",
+      })
+      require("let-it-snow").let_it_snow()
 
       if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
