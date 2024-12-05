@@ -2,8 +2,8 @@
   description = "Home Manager configuration of michaelmongelli";
 
   inputs = {
-    
-    # nixpkgs-master.url   = "github:nixos/nixpkgs"; 
+
+    # nixpkgs-master.url   = "github:nixos/nixpkgs";
     # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs-stable.url   = "github:nixos/nixpkgs/nixos-24.05";
 
@@ -16,23 +16,23 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... } @ inputs:
-    let
-      inherit (self) outputs;
-      system = "aarch64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      homeConfigurations."michaelmongelli" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+	let
+		inherit (self) outputs;
+		system = "aarch64-darwin";
+		pkgs = nixpkgs.legacyPackages.${system};
+	in {
+		homeConfigurations."michaelmongelli" = home-manager.lib.homeManagerConfiguration {
+			inherit pkgs;
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [ 
-	  ./home.nix 
-	];
+			# Specify your home configuration modules here, for example,
+			# the path to your home.nix.
+			modules = [
+				./home.nix
+			];
 
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
-	extraSpecialArgs = { inherit inputs outputs nixpkgs; };
-      };
-    };
+			# Optionally use extraSpecialArgs
+			# to pass through arguments to home.nix
+			extraSpecialArgs = { inherit inputs outputs nixpkgs; };
+		};
+  };
 }
