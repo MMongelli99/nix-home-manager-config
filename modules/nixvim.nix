@@ -275,6 +275,17 @@
 			# 	};
 			# 	meta.homepage = "https://github.com/sphamba/smear-cursor.nvim";
 			# })
+			(pkgs.vimUtils.buildVimPlugin {
+				name = "modicator.nvim";
+				version = "2024-10-21";
+				src = pkgs.fetchFromGitHub {
+					owner = "mawkler";
+					repo = "modicator.nvim";
+					rev = "e349636d905e03305f1eda9c081e63560598f118";
+					sha256 = "mmO0IYe02tYXm2cT0PT6u5Aa+3GDCidQ8YW75oXOPwQ=";
+				};
+				meta.homepage = "https://neovimcraft.com/plugin/mawkler/modicator.nvim/";
+			})
 
       # colorschemes #
 
@@ -385,6 +396,13 @@
 
       -- smear-cursor.nvim --
       -- require('smear_cursor').setup()
+
+      -- modicator.nvim --
+      require('modicator').setup()
+      vim.o.termguicolors = true
+      vim.o.cursorline = true
+			vim.cmd("highlight CursorLine guibg=NONE ctermbg=NONE") -- transparent cursor line
+      vim.o.number = true
 
       if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
