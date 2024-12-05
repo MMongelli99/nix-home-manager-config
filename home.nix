@@ -304,10 +304,10 @@ in
     '';
 
     shellAliases = {
-      switch = "home-manager switch |& nom"; # make sure nix-output-monitor is installed for `nom`
+      sw = "home-manager switch |& nom && exec $SHELL"; # make sure nix-output-monitor is installed for `nom`
       home = "nvim ~/.config/home-manager/home.nix";
 			flake = "nvim ~/.config/home-manager/flake.nix";
-      git-tree = "git log --graph --decorate --oneline $(git rev-list -g --all)";
+      gt = "git log --graph --decorate --oneline $(git rev-list -g --all)"; # git tree
 			git-count-lines = "git ls-files | xargs wc -l";
 			# git-log-search = "search-git-log";
       lt = "list-tree";
