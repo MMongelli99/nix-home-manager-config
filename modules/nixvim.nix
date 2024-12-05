@@ -61,7 +61,7 @@
 
       diffview.enable = true;
 
-      codeium-vim.enable = true;
+      # codeium-vim.enable = true;
 
       neo-tree = {
         enable = true;
@@ -209,6 +209,7 @@
         servers = {
           pylsp.enable = true; # Python
           nil-ls.enable = true; # Nix
+					# nixd.enable = true;
           bashls.enable = true; # Bash
           html.enable = true; # HTML
           cssls.enable = true; # CSS
@@ -242,11 +243,12 @@
     extraPlugins = with pkgs.vimPlugins; [
       neo-tree-nvim
       nvim-notify
-      vim-sneak
       render-markdown-nvim
       markdown-preview-nvim
-      indent-blankline-nvim
+      # indent-blankline-nvim
 			direnv-vim
+      # vim-sneak
+			# vim-wakatime
       # headlines-nvim
       # markview-nvim
       # statix
@@ -341,7 +343,7 @@
       })
 
       -- indent-blankline.nvim --
-      require("ibl").setup()
+      -- require("ibl").setup()
 
       -- markdown-preview.nvim --
       --[[
