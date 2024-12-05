@@ -55,25 +55,33 @@ in
       eza # used in custom zsh function `lt`
       bat
       ripgrep # needed for telescope.nvim
-      tmux
+      # tmux
       zsh-powerlevel10k
       nixfmt-rfc-style
 			nix-tree
       nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
-      cached-nix-shell
+      # cached-nix-shell
       ollama
-			imagemagick # convert image formats on the command line
-			sqlitebrowser
+			# devenv
+			# wakatime
+			# imagemagick # convert image formats on the command line
 			# sqlite-web # view SQLite database in web browser
       # open-webui
       # devenv
       # cachix
 
+      ## window management ##
+			# yabai
+			# skhd
+
       ## applications ##
 
-      emacs # emacsMacport
+      # emacs # emacsMacport
       utm
 			cinny-desktop
+			# teams
+			# ungoogled-chromium
+			# kicad
 			# code-cursor # not available on MacOS
       # zed-editor # broken package
       # darwin.xcode
@@ -86,15 +94,15 @@ in
       ## languages ##
 
       # haskellPackages.hell
-      rustc
-      rustup
+      # rustc
+      # rustup
       # cargo # included in rustup
       python312Packages.python
       python312Packages.pip
-      ghc
-      nodejs_22
-			nodePackages.ts-node
-			nodemon
+      # ghc
+      # nodejs_22
+			# nodePackages.ts-node
+			# nodemon
 
       ## fonts ##
 
@@ -127,14 +135,13 @@ in
     let
       # Ensure each config file is present at its source path specified below.
       # Home Manager will create/update the file in your home directory upon `home-manager switch`.
-      dotfiles = [
-        ".p10k.zsh"
-        ".ghc/ghci.conf"
-        ".tmux.conf"
-      ];
-    in
-      dotfiles
-      |> map (dotfile: {
+      nixStoreDotfiles = [
+        # ".ghc/ghci.conf"
+        # ".tmux.conf"
+				# ".config/skhd/skhdrc"
+				# ".config/yabai/yabairc"
+      ]
+			|> map (dotfile: {
         name  = dotfile;
         value = {
 				          source = ./dotfiles/${dotfile};
@@ -143,6 +150,12 @@ in
 								};
       })
       |> builtins.listToAttrs;
+
+			outOfStoreDotfiles = {
+			  "./dotfiles/.p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.p10k.zsh;
+			};
+    in
+		  outOfStoreDotfiles // nixStoreDotfiles;
 
   /*
     let
