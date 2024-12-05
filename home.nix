@@ -62,6 +62,7 @@ in
       nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
       # cached-nix-shell
       ollama
+			htop
 			# devenv
 			# wakatime
 			# imagemagick # convert image formats on the command line
@@ -76,10 +77,15 @@ in
 
       ## applications ##
 
+      kitty
+			sqlitebrowser
       # emacs # emacsMacport
       utm
 			cinny-desktop
+			obsidian
+			spotify
 			# teams
+			discord
 			# ungoogled-chromium
 			# kicad
 			# code-cursor # not available on MacOS
@@ -102,6 +108,7 @@ in
       # ghc
       # nodejs_22
 			# nodePackages.ts-node
+			deno
 			# nodemon
 
       ## fonts ##
@@ -136,6 +143,7 @@ in
       # Ensure each config file is present at its source path specified below.
       # Home Manager will create/update the file in your home directory upon `home-manager switch`.
       nixStoreDotfiles = [
+			  ".config/kitty/"
         # ".ghc/ghci.conf"
         # ".tmux.conf"
 				# ".config/skhd/skhdrc"
@@ -205,6 +213,15 @@ in
 	programs.direnv = {
 		enable = true;
 		nix-direnv.enable = true;
+		# silent = true;
+		config = {
+      global = {
+			  hide_env_diff = true;
+			};
+		};
+		# stdlib = ''
+		#   echo "activating direnv"
+		# '';
 	};
 
 	programs.neovide = {
