@@ -44,17 +44,57 @@
       #   settings.easing_function = "linear";
       # };
 
+			web-devicons.enable = true;
+
       lualine = {
         enable = true;
-        settings.options.theme = "auto";
-        # sectionSeparators = {
-        #   left = "";
-        #   right = "";
-        # };
-        # componentSeparators = {
-        #   left = "";
-        #   right = "";
-        # };
+        # all the lualine config below is just to get rid
+				# of that damn white triangle next to the filename
+        settings = {
+					options = {
+					  theme = "auto";
+						section_separators = {
+							left = ""; # "";
+							right = ""; # "";
+						};
+						component_separators = {
+							left = "";
+							right = "";
+					  };
+					};
+
+					sections = {
+						lualine_a = [
+							{
+								__unkeyed-1 = "mode";
+								separator.right = "";
+								padding = { left = 2; right = 2; };
+							}
+						];
+						lualine_c = [
+							# you can specify only the sections you want to change
+							{
+								__unkeyed-1 = "filename";
+								newfile_status = true;
+								separator = {
+									left = "";
+									right = "";
+								};
+							}
+						];
+						lualine_z = [
+							{
+								__unkeyed-1 = "location";
+								separator.left = "";
+								padding = {
+									left = 2;
+									right = 2;
+								};
+							}
+							# { __unkeyed-1 = "%L"; } # total lines
+						];
+					};
+				};
       };
 
       bufferline.enable = true;
@@ -137,13 +177,13 @@
 
       noice = {
         enable = true;
-        notify = {
+        settings.notify = {
           enabled = false;
         };
-        messages = {
+        settings.messages = {
           enabled = true; # Adds a padding-bottom to neovim statusline when set to false for some reason
         };
-        lsp = {
+        settings.lsp = {
           message = {
             enabled = true;
           };
@@ -152,11 +192,11 @@
             view = "mini";
           };
         };
-        popupmenu = {
+        settings.popupmenu = {
           enabled = true;
           backend = "nui";
         };
-        format = {
+        settings.format = {
           filter = {
             pattern = [
               ":%s*%%s*s:%s*"
@@ -208,7 +248,7 @@
         # Nixvim LSP modules: https://github.com/nix-community/nixvim/blob/a5e9dbdef1530a76056db12387d489a68eea6f80/plugins/lsp/language-servers/default.nix#L57
         servers = {
           pylsp.enable = true; # Python
-          nil-ls.enable = true; # Nix
+          nil_ls.enable = true; # Nix
 					# nixd.enable = true;
           bashls.enable = true; # Bash
           html.enable = true; # HTML
@@ -217,9 +257,9 @@
           jsonls.enable = true; # JSON
           htmx.enable = true; # HTMX
           sqls.enable = true; # SQL
-          lua-ls.enable = true; # Lua
+          lua_ls.enable = true; # Lua
           marksman.enable = true; # Markdown
-          hls.enable = true; # Haskell
+          # hls.enable = true; # Haskell
         };
       };
 
