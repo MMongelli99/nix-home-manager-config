@@ -1,4 +1,11 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  pkgs-unstable,
+  pkgs-stable,
+  inputs,
+  config,
+  ...
+}:
 let
   systemSpecificPackages = {
     aarch64-darwin = with pkgs; [
@@ -7,23 +14,23 @@ let
     ];
   };
 in
-{
+rec {
   nixpkgs = {
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
       allowBroken = true; # allow hell
-			permittedInsecurePackages = [
-				"cinny-4.2.3"
-				"cinny-unwrapped-4.2.3"
-			];
+      permittedInsecurePackages = [
+        "cinny-4.2.3"
+        "cinny-unwrapped-4.2.3"
+      ];
     };
   };
 
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
     ./modules/nixvim.nix
-		./modules/vscode.nix
+    ./modules/vscode.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -58,37 +65,38 @@ in
       # tmux
       zsh-powerlevel10k
       nixfmt-rfc-style
-			nix-tree
+      nix-tree
       nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
       # cached-nix-shell
       ollama
-			htop
-			# devenv
-			# wakatime
-			# imagemagick # convert image formats on the command line
-			# sqlite-web # view SQLite database in web browser
+      htop
+      nixd
+      # devenv
+      # wakatime
+      # imagemagick # convert image formats on the command line
+      # sqlite-web # view SQLite database in web browser
       # open-webui
       # devenv
       # cachix
 
       ## window management ##
-			# yabai
-			# skhd
+      # yabai
+      # skhd
 
       ## applications ##
 
       kitty
-			sqlitebrowser
+      sqlitebrowser
       # emacs # emacsMacport
       utm
-			cinny-desktop
-			obsidian
-			spotify
-			# teams
-			discord
-			# ungoogled-chromium
-			# kicad
-			# code-cursor # not available on MacOS
+      cinny-desktop
+      obsidian
+      spotify
+      # teams
+      discord
+      # ungoogled-chromium
+      # kicad
+      # code-cursor # not available on MacOS
       # zed-editor # broken package
       # darwin.xcode
       # element-desktop
@@ -107,9 +115,9 @@ in
       python312Packages.pip
       # ghc
       # nodejs_22
-			# nodePackages.ts-node
-			deno
-			# nodemon
+      # nodePackages.ts-node
+      deno
+      # nodemon
 
       ## fonts ##
 
@@ -133,6 +141,7 @@ in
       #   echo "Hello, ${config.home.username}!"
       # '')
     ]
+		++ (with pkgs-stable; [ wireshark ])
     ++ systemSpecificPackages.${system};
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -142,28 +151,29 @@ in
     let
       # Ensure each config file is present at its source path specified below.
       # Home Manager will create/update the file in your home directory upon `home-manager switch`.
-      nixStoreDotfiles = [
-			  ".config/kitty/"
-        # ".ghc/ghci.conf"
-        # ".tmux.conf"
-				# ".config/skhd/skhdrc"
-				# ".config/yabai/yabairc"
-      ]
-			|> map (dotfile: {
-        name  = dotfile;
-        value = {
-				          source = ./dotfiles/${dotfile};
-				          recursive = true;
-									onChange = "echo 'Changes detected in dotfile ${dotfile}'";
-								};
-      })
-      |> builtins.listToAttrs;
+      nixStoreDotfiles =
+        [
+          ".config/kitty/"
+          # ".ghc/ghci.conf"
+          # ".tmux.conf"
+          # ".config/skhd/skhdrc"
+          # ".config/yabai/yabairc"
+        ]
+        |> map (dotfile: {
+          name = dotfile;
+          value = {
+            source = ./dotfiles/${dotfile};
+            recursive = true;
+            onChange = "echo 'Changes detected in dotfile ${dotfile}'";
+          };
+        })
+        |> builtins.listToAttrs;
 
-			outOfStoreDotfiles = {
-			  "./dotfiles/.p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.p10k.zsh;
-			};
+      outOfStoreDotfiles = {
+        "./dotfiles/.p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.p10k.zsh;
+      };
     in
-		  outOfStoreDotfiles // nixStoreDotfiles;
+    outOfStoreDotfiles // nixStoreDotfiles;
 
   /*
     let
@@ -210,45 +220,65 @@ in
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-	programs.direnv = {
-		enable = true;
-		nix-direnv.enable = true;
-		# silent = true;
-		config = {
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+    # silent = true;
+    config = {
       global = {
-			  hide_env_diff = true;
-			};
-		};
-		# stdlib = ''
-		#   echo "activating direnv"
-		# '';
-	};
+        hide_env_diff = true;
+      };
+    };
+    # stdlib = ''
+    #   echo "activating direnv"
+    # '';
+  };
 
-	programs.neovide = {
-	  enable = true;
-    # empty attrset needs to be supplied for default settings
-		settings = {};
-		/* settings = {
-			fork = false;
-			frame = "full";
-			idle = true;
-			maximized = false;
-			no-multigrid = false;
-			srgb = false;
-			tabs = true;
-			theme = "auto";
-			title-hidden = true;
+  programs.zed-editor = {
+    enable = true;
+    userSettings = {
+      "theme" = "VScode Dark Plus";
+      "format_on_save" = "on";
+      "ui_font_family" = "Inconsolata";
+      "buffer_font_family" = "FiraCode Nerd Font";
+      "tab_size" = 2;
+      "ui_font_size" = 16;
+      "buffer_font_size" = 16;
+      "load_direnv" = "direct";
+      "vim_mode" = true;
+    };
+    extensions = [
+      "nix"
+      "Catppuccin Blur"
+    ];
+    extraPackages = [ pkgs.nixd ];
+  };
 
-			font = {
-				normal = [];
-				size = 14.0;
-			};
-	  }; */
-	};
+  # programs.neovide = {
+  #   enable = true;
+  #   # empty attrset needs to be supplied for default settings
+  # 	settings = {};
+  # 	/* settings = {
+  # 		fork = false;
+  # 		frame = "full";
+  # 		idle = true;
+  # 		maximized = false;
+  # 		no-multigrid = false;
+  # 		srgb = false;
+  # 		tabs = true;
+  # 		theme = "auto";
+  # 		title-hidden = true;
+  #
+  # 		font = {
+  # 			normal = [];
+  # 			size = 14.0;
+  # 		};
+  #   }; */
+  # };
 
-	programs.fastfetch.enable = true;
+  programs.fastfetch.enable = true;
 
-  programs.fish.enable = true;
+  # programs.fish.enable = true;
 
   programs.zsh = {
     enable = true;
@@ -279,43 +309,43 @@ in
 
     initExtra = ''
 
-      # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-      # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ~/.p10k.zsh  # your p10k config
+            # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
+            # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+            source ~/.p10k.zsh  # your p10k config
 
-      # ohmyzsh magic-enter config
-      MAGIC_ENTER_GIT_COMMAND='git status'
-      MAGIC_ENTER_OTHER_COMMAND='eza -a'
+            # ohmyzsh magic-enter config
+            MAGIC_ENTER_GIT_COMMAND='git status'
+            MAGIC_ENTER_OTHER_COMMAND='eza -a'
 
-      ## custom utility functions ##
+            ## custom utility functions ##
 
-      list-tree () {
-        if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
-          eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
-        else                                    # if arg is anything else
-          eza --tree --level 1 $@               # then run args with default level
-        fi
-      }
+            list-tree () {
+              if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
+                eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
+              else                                    # if arg is anything else
+                eza --tree --level 1 $@               # then run args with default level
+              fi
+            }
 
-			search-git-log () {
-         git log --diff-filter=A -- ''${$1}
-			}
+      			search-git-log () {
+               git log --diff-filter=A -- ''${$1}
+      			}
 
     '';
 
     shellAliases = {
-      sw = "home-manager switch |& nom && exec $SHELL"; # make sure nix-output-monitor is installed for `nom`
-      home = "nvim ~/.config/home-manager/home.nix";
-			flake = "nvim ~/.config/home-manager/flake.nix";
-      gt = "git log --graph --decorate --oneline $(git rev-list -g --all)"; # git tree
-			git-count-lines = "git ls-files | xargs wc -l";
-			# git-log-search = "search-git-log";
-      lt = "list-tree";
-      # defined in initExtra
-      nix-shell-init = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
-      devenv-init = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
-      ai = "ollama serve & ollama run llama3.1";
-			ip = "ipconfig getifaddr en0";
+      "sw" = "home-manager switch |& nom && exec $SHELL"; # make sure nix-output-monitor is installed for `nom`
+      "home" = "nvim ~/.config/home-manager/home.nix";
+      "flake" = "nvim ~/.config/home-manager/flake.nix";
+      "gt" = "git log --graph --decorate --oneline $(git rev-list -g --all)"; # git tree
+      "git-count-lines" = "git ls-files | xargs wc -l";
+      # "git-log-search" = "search-git-log";
+      "lt" = "list-tree"; # defined in initExtra
+      "nix-shell-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
+      "devenv-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
+      "ai" = "ollama serve & ollama run llama3.1";
+      "ip" = "ipconfig getifaddr en0";
+      "Wireshark" = "sudo '${home.homeDirectory}/Applications/Home Manager Apps/Wireshark.app/Contents/MacOS/Wireshark'";
     };
 
   };
