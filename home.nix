@@ -13,6 +13,7 @@ let
       arc-browser
     ];
   };
+  p10k-config-file = /Users/michaelmongelli/.config/home-manager/dotfiles/.p10k.zsh;
 in
 rec {
   nixpkgs = {
@@ -170,7 +171,7 @@ rec {
         |> builtins.listToAttrs;
 
       outOfStoreDotfiles = {
-        "./dotfiles/.p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.p10k.zsh;
+				".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink p10k-config-file;
       };
     in
     outOfStoreDotfiles // nixStoreDotfiles;
@@ -215,7 +216,8 @@ rec {
 
   home.sessionVariables = {
     EDITOR = "nvim";
-  };
+    POWERLEVEL9K_CONFIG_FILE = p10k-config-file;
+	};
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -307,31 +309,31 @@ rec {
       }
     ];
 
-    initExtra = ''
+    initExtra =	''
+			# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
+			# Idk how but `p10k configure` does modify the home-manager p10k dotfile
+			# even thouhg POWERLEVEL9K_CONFIG_FILE is not set because `source ~/.p10k.zsh` after hm-session-vars.sh
+			# source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+			source ~/.p10k.zsh
 
-            # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-            # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-            source ~/.p10k.zsh  # your p10k config
+			# ohmyzsh magic-enter config
+			MAGIC_ENTER_GIT_COMMAND='git status'
+			MAGIC_ENTER_OTHER_COMMAND='eza -a'
 
-            # ohmyzsh magic-enter config
-            MAGIC_ENTER_GIT_COMMAND='git status'
-            MAGIC_ENTER_OTHER_COMMAND='eza -a'
+			## custom utility functions ##
 
-            ## custom utility functions ##
+			list-tree () {
+				if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
+					eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
+				else                                    # if arg is anything else
+					eza --tree --level 1 $@               # then run args with default level
+				fi
+			}
 
-            list-tree () {
-              if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
-                eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
-              else                                    # if arg is anything else
-                eza --tree --level 1 $@               # then run args with default level
-              fi
-            }
-
-      			search-git-log () {
-               git log --diff-filter=A -- ''${$1}
-      			}
-
-    '';
+			search-git-log () {
+				 git log --diff-filter=A -- ''${$1}
+			}
+		'';
 
     shellAliases = {
       "sw" = "home-manager switch |& nom && exec $SHELL"; # make sure nix-output-monitor is installed for `nom`
