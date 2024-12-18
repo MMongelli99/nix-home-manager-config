@@ -13,7 +13,6 @@ let
       arc-browser
     ];
   };
-  p10k-config-file = /Users/michaelmongelli/.config/home-manager/dotfiles/.p10k.zsh;
 in
 rec {
   nixpkgs = {
@@ -233,7 +232,6 @@ rec {
 
   home.sessionVariables = {
     EDITOR = "nvim";
-    POWERLEVEL9K_CONFIG_FILE = p10k-config-file;
 	};
 
   # Let Home Manager install and manage itself.
