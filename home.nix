@@ -150,11 +150,14 @@ rec {
 
   home.file =
     let
+		  dotfilesDirectory = "${config.home.homeDirectory}/.config/home-manager/dotfiles";
+
       # Ensure each config file is present at its source path specified below.
       # Home Manager will create/update the file in your home directory upon `home-manager switch`.
-      nixStoreDotfiles =
+
+			nixStoreDotfiles =
         [
-          ".config/kitty/"
+          # ".config/kitty/"
           # ".ghc/ghci.conf"
           # ".tmux.conf"
           # ".config/skhd/skhdrc"
@@ -170,11 +173,25 @@ rec {
         })
         |> builtins.listToAttrs;
 
-      outOfStoreDotfiles = {
-				".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink p10k-config-file;
-      };
+      outOfStoreDotfiles =
+				[
+					".p10k.zsh"
+          ".config/kitty/"
+				]
+				|> map (dotfile: {
+				  name = dotfile;
+					value = {
+					  source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDirectory}/${dotfile}";
+					};
+				})
+				|> builtins.listToAttrs;
+			# {
+			# 	".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink p10k-config-file;
+			# 	".config/kitty/kitty.conf".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.config/home-manager/dotfiles/.config/kitty/kitty.conf;
+				# ".config/zed/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${home.homeDirectory}/.config/home-manager/dotfiles/.config/zed/settings.json";
+      # };
     in
-    outOfStoreDotfiles // nixStoreDotfiles;
+      nixStoreDotfiles // outOfStoreDotfiles;
 
   /*
     let
