@@ -97,7 +97,6 @@ rec {
       # ungoogled-chromium
       # kicad
       # code-cursor # not available on MacOS
-      # zed-editor # broken package
       # darwin.xcode
       # element-desktop
       # ladybird
@@ -253,6 +252,7 @@ rec {
 
   programs.zed-editor = {
     enable = true;
+    # .config/zed/settings.json
     userSettings = {
       "theme" = "VScode Dark Plus";
       "format_on_save" = "on";
@@ -261,8 +261,19 @@ rec {
       "tab_size" = 2;
       "ui_font_size" = 16;
       "buffer_font_size" = 16;
+			"outline_panel" = {
+			  "dock" = "right";
+			};
+      "project_panel" = {
+				"dock" = "right";
+			};
       "load_direnv" = "direct";
       "vim_mode" = true;
+			"terminal" = {
+				"font_family" = "FiraCode Nerd Font";
+				"blinking" = "on";
+				"working_directory" = "current_project_directory";
+			};
     };
     extensions = [
       "nix"
