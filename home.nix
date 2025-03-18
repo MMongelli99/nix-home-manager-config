@@ -120,7 +120,15 @@ rec {
 
       ## fonts ##
 
+      nerd-fonts.fira-code
       meslo-lgs-nf
+			hasklig
+			nerd-fonts.hasklug
+			nerd-fonts.monoid
+			borg-sans-mono
+			# iosevka
+			nerd-fonts.zed-mono
+			mononoki
 
       # TODO: to try in the future
       # virtualbox            # not available on MacOS
