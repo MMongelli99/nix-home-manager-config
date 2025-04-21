@@ -350,9 +350,27 @@ rec {
 			# source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
 			source ~/.p10k.zsh
 
+			# Run this command in your terminal to add Homebrew to your PATH:
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+
 			# ohmyzsh magic-enter config
 			MAGIC_ENTER_GIT_COMMAND='git status'
-			MAGIC_ENTER_OTHER_COMMAND='eza -a'
+			MAGIC_ENTER_OTHER_COMMAND='eza -la'
+
+			# colored man pages
+			export PAGER="less"
+			export GROFF_NO_SGR=1
+			export LESS_TERMCAP_mb=$'\e[1;32m'
+			export LESS_TERMCAP_md=$'\e[1;32m'
+			export LESS_TERMCAP_me=$'\e[0m'
+			export LESS_TERMCAP_se=$'\e[0m'
+			export LESS_TERMCAP_so=$'\e[01;33m'
+			export LESS_TERMCAP_ue=$'\e[0m'
+			export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+			# sudo kitty +runpy 'from kitty.fast_data_types import cocoa_set_app_icon; import sys; cocoa_set_app_icon(*sys.argv[1:]); print("OK")' \
+			# /Users/michaelmongelli/.config/home-manager/dotfiles/.config/kitty/kitty.app.png \
+			# /nix/store/30cxyaqkw63q7zwlqyqhzgn6lg8ji28b-kitty-0.37.0/Applications/kitty.app
 
 			## custom utility functions ##
 
@@ -367,21 +385,38 @@ rec {
 			search-git-log () {
 				 git log --diff-filter=A -- ''${$1}
 			}
+
+			saybg() {
+        (set +m; say "$1" > /dev/null 2>&1 &) 2>/dev/null
+			}
 		'';
 
     shellAliases = {
-      "sw" = "home-manager switch |& nom && exec $SHELL"; # make sure nix-output-monitor is installed for `nom`
-      "home" = "nvim ~/.config/home-manager/home.nix";
+		  # make sure nix-output-monitor is installed for `nom`
+      "sw" = ''
+				# saybg 'rebuilding home manager configuration'
+			  if home-manager switch |& nom; then
+					saybg 'home manager rebuild complete'
+				  exec $SHELL
+				else
+				  saybg 'home manager rebuild failed'
+				fi
+			'';
+			"home" = "nvim ~/.config/home-manager/home.nix";
       "flake" = "nvim ~/.config/home-manager/flake.nix";
       "gt" = "git log --graph --decorate --oneline $(git rev-list -g --all)"; # git tree
       "git-count-lines" = "git ls-files | xargs wc -l";
       # "git-log-search" = "search-git-log";
       "lt" = "list-tree"; # defined in initExtra
+			"la" = "eza -la";
       "nix-shell-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
       "devenv-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
       "ai" = "ollama serve & ollama run llama3.1";
       "ip" = "ipconfig getifaddr en0";
+			"vscat" = "bat -pP --theme='Visual Studio Dark+'";
+			"sshk" = "kitty +kitten ssh";
       "Wireshark" = "sudo '${home.homeDirectory}/Applications/Home Manager Apps/Wireshark.app/Contents/MacOS/Wireshark'";
+			"scp-nonstrict" = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
     };
 
   };
