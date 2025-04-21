@@ -24,13 +24,11 @@
     # Nixvim colorscheme modules: https://github.com/nix-community/nixvim/tree/main/plugins/colorschemes
     colorschemes.vscode = {
       enable = true;
-      settings = {
-        transparent = true;
-      };
+      settings.transparent = true;
     };
 
     # Set colorscheme from extraPlugins
-    # colorscheme = "vim-monokai-tasty";
+    # colorscheme = "vague";
 
     plugins = {
 
@@ -43,6 +41,8 @@
       #   enable = true;
       #   settings.easing_function = "linear";
       # };
+
+			blink-cmp.enable = true;
 
 			web-devicons.enable = true;
 
@@ -97,7 +97,13 @@
 				};
       };
 
-      bufferline.enable = true;
+      bufferline = {
+				enable = true;
+				settings.options = {
+				  numbers = "ordinal";
+					# indicator.style = "underline"; # not working, might be a Kitty thing
+				};
+			};
 
       diffview.enable = true;
 
@@ -254,6 +260,7 @@
           html.enable = true; # HTML
           cssls.enable = true; # CSS
           tailwindcss.enable = true; # TailwindCSS
+					tsserver.enable = true; # TypeScript
           jsonls.enable = true; # JSON
           htmx.enable = true; # HTMX
           sqls.enable = true; # SQL
@@ -347,6 +354,36 @@
 				};
 				meta.homepage = "https://github.com/prisma/vim-prisma/";
 			})
+			(pkgs.vimUtils.buildVimPlugin {
+        pname = "rainbow_csv.nvim";
+				version = "2024-07-08";
+				src = pkgs.fetchFromGitHub {
+				  owner = "cameron-wags";
+					repo = "rainbow_csv.nvim";
+					rev = "7f3fddfe813641035fac2cdf94c2ff69bb0bf0b9";
+					sha256 = "/XHQd/+sqhVeeMAkcKNvFDKFuFecChrgp56op3KQAhs=";
+				};
+			})
+			(pkgs.vimUtils.buildVimPlugin {
+			  pname = "animatedbg.nvim";
+				version = "2024-12-27";
+				src = pkgs.fetchFromGitHub {
+					owner = "alanfortlink";
+					repo = "animatedbg.nvim";
+					rev = "5d093d681e157250db6dc808aeb9081775120ddb";
+					sha256 = "0rbdpKO8IOMxTTQa5XriCamZhm8JNSPSqUZSwenjnT4=";
+				};
+			})
+			(pkgs.vimUtils.buildVimPlugin {
+				pname = "beepboop.nvim";
+				version = "2025-01-06";
+				src = pkgs.fetchFromGitHub {
+					owner = "EggbertFluffle";
+					repo = "beepboop.nvim";
+					rev = "9a7fbb722526d6a73161ef11aaeb13207437ec17";
+					sha256 = "0yjhyqlafsnzs3wq27ypdm9121bwfda8cplz2yr4299rvch9ib9l";
+				};
+			})
 
       # colorschemes #
 
@@ -377,7 +414,29 @@
         };
         meta.homepage = "https://github.com/DanWlker/primeppuccin.git";
       })
-
+      # ashen
+      (pkgs.vimUtils.buildVimPlugin {
+      	name = "ashen.nvim";
+	      src = pkgs.fetchFromGitHub {
+		      owner = "ficcdaf";
+		      repo = "ashen.nvim";
+		      rev = "b0ddf13ff5fcc20f3c78aaf7a28e68b3923224e2";
+		      sha256 = "1kx7zqs89ri80627arzyjkbcbc4grp18fk2dhy5a8achyjq0kvnj";
+	      };
+	      meta.homepage = "https://github.com/ficcdaf/ashen.nvim";
+      })
+			# neofusion
+			(pkgs.vimUtils.buildVimPlugin {
+			  name = "neofusion.nvim";
+			  version = "2024-12-23";
+			  src = pkgs.fetchFromGitHub {
+			    owner = "diegoulloao";
+			    repo  = "neofusion.nvim";
+			    rev   = "82267203b44ec5c54291dc9bd3a0ef9faba05638";
+			    sha256 = "0s6vwgypgfxria1p5h5kmidgnriazjssvxy6jj2q3qiy1m2a944w";
+			  };
+			  meta.homepage = "https://github.com/diegoulloao/neofusion.nvim";
+			})
     ];
 
     globals = {
@@ -412,11 +471,11 @@
 
     extraConfigLua = ''
       -- transparent background for all themes --
-		  vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'StatusLine', { bg = 'NONE' })
+		  -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE' })
+      -- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE' })
+      -- vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE' })
+      -- vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'NONE' })
+      -- vim.api.nvim_set_hl(0, 'StatusLine', { bg = 'NONE' })
 
       require("scrollbar").setup({
         throttle_ms = 0,
@@ -469,7 +528,18 @@
       require("let-it-snow").setup({
         snowflake_char = "\u{F313}",
       })
-      require("let-it-snow").let_it_snow()
+      -- require("let-it-snow").let_it_snow()
+
+      -- rainbow_csv.nvim --
+      require("rainbow_csv").setup()
+
+      -- animatedbg.nvim --
+      local animatedbg = require("animatedbg-nvim")
+      animatedbg.setup()
+      animatedbg.play({ animation = "matrix" })
+
+      -- beepboop.nvim --
+      require("beepboop").setup()
 
       if vim.g.neovide then
         -- Put anything you want to happen only in Neovide here
