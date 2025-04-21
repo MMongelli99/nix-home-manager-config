@@ -189,6 +189,8 @@ rec {
 				[
 					".p10k.zsh"
           ".config/kitty/"
+					".config/ghostty/"
+          ".ghc/ghci.conf"
 				]
 				|> map (dotfile: {
 				  name = dotfile;
