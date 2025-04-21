@@ -324,6 +324,11 @@ rec {
 
   # programs.fish.enable = true;
 
+	# programs.oh-my-posh = {
+  #   enable = true;
+	# 	useTheme = "gruvbox"; # "zash";
+	# };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
