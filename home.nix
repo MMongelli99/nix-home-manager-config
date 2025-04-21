@@ -71,6 +71,7 @@ rec {
       ollama
       htop
       nixd
+			rust-analyzer
       # devenv
       # wakatime
       # imagemagick # convert image formats on the command line
@@ -94,10 +95,15 @@ rec {
       spotify
       # teams
       discord
+			dolphin-emu
+			devenv
+			# qbittorrent
+			# code-cursor
       # ungoogled-chromium
       # kicad
       # code-cursor # not available on MacOS
-      # darwin.xcode
+    	# darwin.xcode
+			# darwin.xcode_9_4_1
       # element-desktop
       # ladybird
       # zen-browser
@@ -115,7 +121,7 @@ rec {
       # ghc
       # nodejs_22
       # nodePackages.ts-node
-      deno
+      # deno
       # nodemon
 
       ## fonts ##
@@ -431,5 +437,9 @@ rec {
       push.autoSetupRemote = true;
     };
   };
+
+	programs.gh.enable = true;
+
+	programs.lazygit.enable = true;
 
 }
