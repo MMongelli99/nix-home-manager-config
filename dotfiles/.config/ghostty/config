@@ -1,0 +1,10 @@
+font-family = Fira Code
+theme = VSCode Dark Modern
+window-theme = ghostty
+clipboard-read = allow
+clipboard-paste-protection = false
+shell-integration = zsh
+
+# Transparency
+background-opacity = 0.8
+background-blur-radius = 20
