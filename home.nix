@@ -3,7 +3,9 @@
   pkgs-unstable,
   pkgs-stable,
   inputs,
+  outputs,
   config,
+  customNeovim,
   ...
 }:
 let
@@ -28,8 +30,8 @@ rec {
   };
 
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim
-    ./modules/nixvim.nix
+    # inputs.nixvim.homeManagerModules.nixvim
+    # ./modules/nixvim.nix
     ./modules/vscode.nix
   ];
 
@@ -55,6 +57,8 @@ rec {
       # # Adds the 'hello' command to your environment. It prints a friendly
       # # "Hello, world!" when run.
       # pkgs.hello
+
+      customNeovim.neovim
 
       ## cli tools ##
       # neofetch # RIP
@@ -247,7 +251,8 @@ rec {
 
   home.sessionVariables = {
     EDITOR = "nvim";
-	};
+    HM = "${home.homeDirectory}/.config/home-manager/";
+  };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
