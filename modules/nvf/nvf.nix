@@ -5,7 +5,7 @@
 }: {
   imports = [
     ./plugins/lualine.nix
-    ./colorschemes/vim-monokai-tasty.nix
+    ./colorschemes/monokai-nightasty-nvim.nix
   ];
 
   vim = {
@@ -54,6 +54,9 @@
       };
     };
 
+    # rename and autoclose HTML tags
+    treesitter.autotagHtml = true;
+
     languages = {
       enableLSP = true;
       enableTreesitter = true;
@@ -62,7 +65,12 @@
       nix.enable = true;
       lua.enable = true;
       ts.enable = true;
-      python.enable = true;
+      html.enable = true;
+      css.enable = true;
+      python = {
+        enable = true;
+        format.enable = false;
+      };
       bash.enable = true;
       markdown = {
         enable = true;
