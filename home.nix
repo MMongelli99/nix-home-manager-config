@@ -16,6 +16,8 @@ let
       arc-browser
     ];
   };
+  tmuxConfFile = "${config.xdg.configHome}/tmux/tmux.conf";
+  tmuxExtraConfFile = "${config.xdg.configHome}/tmux/extra.conf";
 in
 rec {
 
@@ -121,8 +123,8 @@ rec {
       # rustc
       # rustup
       # cargo # included in rustup
-      python312Packages.python
-      python312Packages.pip
+      # python312Packages.python
+      # python312Packages.pip
       # ghc
       # nodejs_22
       # nodePackages.ts-node
@@ -283,8 +285,18 @@ rec {
     ];
     extraConfig = ''
       set -g mouse on
-      set -g pane-border-style 'fg=colour1'
-      set -g pane-active-border-style 'fg=colour3'
+      set -g status-left-length 30
+      set -g status-right-length 50
+
+      set -g status-interval 1
+      set -g status-right '#H %Y-%m-%dT%H:%M:%S'
+
+      bind r source-file "${tmuxConfFile}" \; display-message "tmux config reloaded"
+
+      # dynamically update tmux via extra config file
+      if-shell "[ -f ${tmuxExtraConfFile} ]" {
+        source-file "${tmuxExtraConfFile}"
+      }
     '';
   };
 
@@ -438,14 +450,20 @@ rec {
       saybg() {
         (set +m; say "$1" > /dev/null 2>&1 &) 2>/dev/null
       }
+
+      # sshfs mount template
+      # sudo diskutil umount force <username>@<ip>
+
+      # sshfs unmount template
+      # sshfs <username>@<ip>:/ <username>@<ip>  -o reconnect,volname=<username>,allow_other
     '';
 
     shellAliases = {
       # make sure nix-output-monitor is installed for `nom`
       "sw" = ''
-        # saybg 'rebuilding home manager configuration'
         if home-manager switch |& nom; then
           saybg 'home manager rebuild complete'
+          tmux source ${tmuxConfFile}
           exec $SHELL
         else
           saybg 'home manager rebuild failed'
