@@ -181,6 +181,7 @@ rec {
           # ".ghc/ghci.conf"
           # ".config/skhd/skhdrc"
           # ".config/yabai/yabairc"
+          ".bash_completion"
         ]
         |> map (dotfile: {
           name = dotfile;
