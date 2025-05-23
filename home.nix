@@ -468,6 +468,7 @@ rec {
          git log --diff-filter=A -- ''${$1}
       }
 
+      # TODO: find a better way to alert that home manager rebuild completed with success/failure
       saybg() {
         (set +m; say "$1" > /dev/null 2>&1 &) 2>/dev/null
       }
@@ -483,17 +484,20 @@ rec {
       # make sure nix-output-monitor is installed for `nom`
       "sw" = ''
         if home-manager switch |& nom; then
-          saybg 'home manager rebuild complete'
+          # saybg 'rebuild complete'
           tmux source ${tmuxConfFile}
           exec $SHELL
         else
-          saybg 'home manager rebuild failed'
+          # saybg 'rebuild failed'
         fi
       '';
       "home" = "${home.sessionVariables.EDITOR} ~/.config/home-manager/home.nix";
       "flake" = "${home.sessionVariables.EDITOR} ~/.config/home-manager/flake.nix";
       "nvf" = "${home.sessionVariables.EDITOR} ~/.config/home-manager/modules/nvf/";
-      "gt" = "git log --graph --decorate --oneline $(git rev-list -g --all)"; # git tree
+      "gt" = ''
+        git log --graph --decorate --color --format="%C(auto)%h%Creset %C(bold blue)%ad%Creset %C(auto)%d%Creset %s" --date=iso $(git rev-list -g --all)
+      ''; # git tree
+      "lg" = "lazygit";
       "git-count-lines" = "git ls-files | xargs wc -l";
       # "git-log-search" = "search-git-log";
       "lt" = "list-tree"; # defined in initExtra
