@@ -1,11 +1,7 @@
-{
-  pkgs,
-  lib,
-  ...
-}: {
+{...}: {
   imports = [
     ./plugins/lualine.nix
-    ./colorschemes/monokai-nightasty-nvim.nix
+    ./colorschemes/vim-monokai-tasty.nix
   ];
 
   vim = {

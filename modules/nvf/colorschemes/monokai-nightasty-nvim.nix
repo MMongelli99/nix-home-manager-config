@@ -12,7 +12,7 @@
       meta.homepage = "https://github.com/polirritmico/monokai-nightasty.nvim";
     };
     setup = ''
-      vim.opt.background = "dark"
+      vim.opt.background = "dark" -- light or dark
       require("monokai-nightasty").load()
 
       -- transparent background
