@@ -15,6 +15,8 @@
       shiftwidth = 2;
     };
 
+    tabline.nvimBufferline.enable = true;
+
     telescope.enable = true;
 
     autocomplete.nvim-cmp.enable = true;
@@ -57,6 +59,11 @@
     # rename and autoclose HTML tags
     treesitter.autotagHtml = true;
 
+    git = {
+      enable = true;
+      git-conflict.enable = true;
+    };
+
     languages = {
       enableLSP = true;
       enableTreesitter = true;
@@ -67,10 +74,6 @@
       ts.enable = true;
       html.enable = true;
       css.enable = true;
-      python = {
-        enable = true;
-        format.enable = false;
-      };
       bash.enable = true;
       markdown = {
         enable = true;
