@@ -261,6 +261,26 @@ rec {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  programs.zellij = {
+    enable = true;
+    settings = {
+      themes.monokai = {
+        fg = "#cecec3";
+        bg = "#212121";
+        black = "#212121";
+        red = "#FC1A70";
+        green = "#A4E400";
+        yellow = "#ffff87";
+        blue = "#af87ff";
+        magenta = "#FC1A70";
+        cyan = "#62D8F1";
+        white = "#f7f7f0";
+        orange = "#FF9700";
+      };
+      theme = "monokai";
+    };
+  };
+
   programs.tmux = {
     enable = true;
     # sensibleOnTop = true; # unable to set tmux default shell with sensible enabled
