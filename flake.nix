@@ -5,6 +5,7 @@
     # nixpkgs-master.url = "github:nixos/nixpkgs";
     # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-2505.url = "github:nixos/nixpkgs/nixos-25.05";
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -24,6 +25,7 @@
     self,
     nixpkgs,
     nixpkgs-stable,
+    nixpkgs-2505,
     home-manager,
     nvf,
     ...
@@ -32,10 +34,12 @@
     system = "aarch64-darwin";
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs-stable = nixpkgs-stable.legacyPackages.${system};
+    pkgs-2505 = nixpkgs-2505.legacyPackages.${system};
     customNeovim = nvf.lib.neovimConfiguration {
-      inherit pkgs;
+      pkgs = pkgs-2505;
+      # extraSpecialArgs = {inherit pkgs-2505;};
       modules = [
-        ./modules/nvf/nvf.nix
+        ./modules/neovim/neovim.nix
       ];
     };
     # overlay so I can get most Zed editor from unstable without updating all my flake inputs
