@@ -1,10 +1,26 @@
-{...}: {
+{
+  # pkgs,
+  # pkgs-2505,
+  ...
+}: {
   imports = [
     ./plugins/lualine.nix
-    ./colorschemes/vim-monokai-tasty.nix
+    # ./colorschemes/vim-monokai-tasty.nix
+    # ./plugins/haskell.nix
   ];
 
   vim = {
+    luaConfigPost = ''
+
+    '';
+
+    theme = {
+      enable = true;
+      name = "gruvbox";
+      style = "dark";
+      transparent = true;
+    };
+
     options = {
       number = true;
       relativenumber = true;
@@ -15,7 +31,7 @@
 
     telescope.enable = true;
 
-    autocomplete.nvim-cmp.enable = true;
+    # autocomplete.nvim-cmp.enable = true;
 
     visuals = {
       nvim-web-devicons.enable = true;
@@ -75,6 +91,8 @@
         enable = true;
         extensions.render-markdown-nvim.enable = true;
       };
+      # haskell.enable = true;
+      # haskell.lsp.enable = true;
     };
   };
 }
