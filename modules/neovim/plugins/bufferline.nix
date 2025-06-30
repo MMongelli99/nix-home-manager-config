@@ -1,6 +1,9 @@
 {
   vim.tabline.nvimBufferline = {
     enable = true;
-    setupOpts.options.numbers = "none";
+    setupOpts.options = {
+      numbers = "none";
+      indicator.style = "none";
+    };
   };
 }
