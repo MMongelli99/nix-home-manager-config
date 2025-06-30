@@ -7,8 +7,7 @@
   config,
   customNeovim,
   ...
-}:
-let
+}: let
   homeManagerDirectory = "${config.home.homeDirectory}/.config/home-manager";
   systemSpecificPackages = {
     aarch64-darwin = with pkgs; [
@@ -18,13 +17,11 @@ let
   };
   tmuxConfFile = "${config.xdg.configHome}/tmux/tmux.conf";
   tmuxExtraConfFile = "${config.xdg.configHome}/tmux/extra.conf";
-in
-rec {
-
+in rec {
   nixpkgs = {
     config = {
       allowUnfree = true;
-      allowUnfreePredicate = (_: true);
+      allowUnfreePredicate = _: true;
       allowBroken = true; # allow hell
       permittedInsecurePackages = [
         "cinny-4.2.3"
@@ -55,185 +52,191 @@ rec {
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages =
+  home.packages = let
+    zen-browser = import ./packages/zen-browser/default.nix {
+      inherit (pkgs) lib fetchurl stdenvNoCC appimageTools undmg;
+    };
+  in
     with pkgs;
-    [
-      # # Adds the 'hello' command to your environment. It prints a friendly
-      # # "Hello, world!" when run.
-      # pkgs.hello
+      [
+        # # Adds the 'hello' command to your environment. It prints a friendly
+        # # "Hello, world!" when run.
+        # pkgs.hello
 
-      customNeovim.neovim
+        customNeovim.neovim
+        zen-browser
 
-      ## cli tools ##
-      # neofetch # RIP
-      trash-cli
-      eza # used in custom zsh function `lt`
-      bat
-      ripgrep # needed for telescope.nvim
-      zsh-powerlevel10k
-      nixfmt-rfc-style
-      nix-tree
-      nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
-      # cached-nix-shell
-      ollama
-      htop
-      nixd
-      rust-analyzer
-      # devenv
-      # wakatime
-      # imagemagick # convert image formats on the command line
-      # sqlite-web # view SQLite database in web browser
-      # open-webui
-      # devenv
-      # cachix
+        ## cli tools ##
+        # neofetch # RIP
+        trash-cli
+        # ripgrep # needed for telescope.nvim
+        zsh-powerlevel10k
+        nixfmt-rfc-style
+        nix-tree
+        nix-output-monitor # <nix command> |& nom # shows build process with some style, used in `switch` shell alias
+        # cached-nix-shell
+        ollama
+        nixd
+        duf
+        # rust-analyzer
+        # devenv
+        # wakatime
+        # imagemagick # convert image formats on the command line
+        # sqlite-web # view SQLite database in web browser
+        # open-webui
+        # devenv
+        # cachix
 
-      ## window management ##
-      # yabai
-      # skhd
+        ## window management ##
+        # yabai
+        # skhd
 
-      ## applications ##
+        ## applications ##
 
-      kitty
-      sqlitebrowser
-      # emacs # emacsMacport
-      utm
-      cinny-desktop
-      obsidian
-      spotify
-      # teams
-      discord
-      dolphin-emu
-      devenv
-      # qbittorrent
-      # code-cursor
-      # ungoogled-chromium
-      # kicad
-      # code-cursor # not available on MacOS
-      # darwin.xcode
-      # darwin.xcode_9_4_1
-      # element-desktop
-      # ladybird
-      # zen-browser
-      # thunderbird
-      # nyxt
+        kitty
+        sqlitebrowser
+        # emacs # emacsMacport
+        utm
+        cinny-desktop
+        obsidian
+        spotify
+        # teams
+        discord
+        dolphin-emu
+        # rustdesk
+        # qbittorrent
+        # code-cursor
+        # ungoogled-chromium
+        # kicad
+        # code-cursor # not available on MacOS
+        # darwin.xcode
+        # darwin.xcode_9_4_1
+        # element-desktop
+        # ladybird
+        # thunderbird
+        # nyxt
 
-      ## languages ##
+        ## languages ##
 
-      # haskellPackages.hell
-      # rustc
-      # rustup
-      # cargo # included in rustup
-      # python312Packages.python
-      # python312Packages.pip
-      # ghc
-      # nodejs_22
-      # nodePackages.ts-node
-      # deno
-      # nodemon
+        # haskellPackages.hell
+        # rustc
+        # rustup
+        # cargo # included in rustup
+        # python312Packages.python
+        # python312Packages.pip
+        # python314
+        # ghc
+        # stack
+        # cabal-install
+        # nodejs_22
+        # nodePackages.ts-node
+        # deno
+        # nodemon
 
-      ## fonts ##
+        ## fonts ##
 
-      nerd-fonts.fira-code
-      meslo-lgs-nf
-      hasklig
-      nerd-fonts.hasklug
-      nerd-fonts.monoid
-      borg-sans-mono
-      # iosevka
-      nerd-fonts.zed-mono
-      mononoki
+        nerd-fonts.fira-code
+        meslo-lgs-nf
+        hasklig
+        nerd-fonts.hasklug
+        nerd-fonts.monoid
+        borg-sans-mono
+        # iosevka
+        nerd-fonts.zed-mono
+        mononoki
 
-      # TODO: to try in the future
-      # virtualbox            # not available on MacOS
-      # devbox                # wasn't a fan but might try again in the future
-      # haskellPackages.hell  # broken package, debug it?
+        # TODO: to try in the future
+        # virtualbox            # not available on MacOS
+        # devbox                # wasn't a fan but might try again in the future
+        # haskellPackages.hell  # broken package, debug it?
+        haskell-language-server
 
-      # # It is sometimes useful to fine-tune packages, for example, by applying
-      # # overrides. You can do that directly here, just don't forget the
-      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-      # # fonts?
-      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+        # # It is sometimes useful to fine-tune packages, for example, by applying
+        # # overrides. You can do that directly here, just don't forget the
+        # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+        # # fonts?
+        # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-      # # You can also create simple shell scripts directly inside your
-      # # configuration. For example, this adds a command 'my-hello' to your
-      # # environment:
-      # (pkgs.writeShellScriptBin "my-hello" ''
-      #   echo "Hello, ${config.home.username}!"
-      # '')
-    ]
-    ++ (with pkgs-stable; [ wireshark ])
-    ++ systemSpecificPackages.${system};
+        # # You can also create simple shell scripts directly inside your
+        # # configuration. For example, this adds a command 'my-hello' to your
+        # # environment:
+        # (pkgs.writeShellScriptBin "my-hello" ''
+        #   echo "Hello, ${config.home.username}!"
+        # '')
+      ]
+      ++ (with pkgs-stable; [wireshark])
+      ++ systemSpecificPackages.${system};
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
 
-  home.file =
-    let
-      # dotfilesDirectory = "~/.config/home-manager/dotfiles";
-      dotfilesDirectory = "${config.home.homeDirectory}/.config/home-manager/dotfiles";
+  home.file = let
+    # dotfilesDirectory = "~/.config/home-manager/dotfiles";
+    dotfilesDirectory = "${homeManagerDirectory}/dotfiles";
 
-      # Ensure each config file is present at its source path specified below.
-      # Home Manager will create/update the file in your home directory upon `home-manager switch`.
+    # Ensure each config file is present at its source path specified below.
+    # Home Manager will create/update the file in your home directory upon `home-manager switch`.
 
-      nixStoreDotfiles =
-        [
-          # ".config/kitty/"
-          # ".ghc/ghci.conf"
-          # ".config/skhd/skhdrc"
-          # ".config/yabai/yabairc"
-          ".bash_completion"
-        ]
-        |> map (dotfile: {
-          name = dotfile;
-          value = {
-            source = ./dotfiles/${dotfile};
-            recursive = true;
-            onChange = "echo 'Changes detected in dotfile ${dotfile}'";
-          };
-        })
-        |> builtins.listToAttrs;
+    nixStoreDotfiles =
+      [
+        # ".config/kitty/"
+        # ".ghc/ghci.conf"
+        # ".config/skhd/skhdrc"
+        # ".config/yabai/yabairc"
+        # ".config/bat/config"
+        ".bash_completion" # tmux autocomplete for bash
+      ]
+      |> map (dotfile: {
+        name = dotfile;
+        value = {
+          source = ./dotfiles/${dotfile};
+          recursive = true;
+          onChange = "echo 'Changes detected in dotfile ${dotfile}'";
+        };
+      })
+      |> builtins.listToAttrs;
 
-      outOfStoreDotfiles =
-        [
-          ".p10k.zsh"
-          ".config/kitty/"
-          ".config/ghostty/"
-          ".ghc/ghci.conf"
-        ]
-        |> map (dotfile: {
-          name = dotfile;
-          value = {
-            source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDirectory}/${dotfile}";
-          };
-        })
-        |> builtins.listToAttrs;
-      # {
-      #   ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink p10k-config-file;
-      #   ".config/kitty/kitty.conf".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.config/home-manager/dotfiles/.config/kitty/kitty.conf;
-        # ".config/zed/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${home.homeDirectory}/.config/home-manager/dotfiles/.config/zed/settings.json";
-      # };
-    in
-      nixStoreDotfiles // outOfStoreDotfiles;
+    outOfStoreDotfiles =
+      [
+        ".p10k.zsh"
+        ".config/kitty/"
+        ".config/ghostty/"
+        ".ghc/ghci.conf"
+      ]
+      |> map (dotfile: {
+        name = dotfile;
+        value = {
+          source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDirectory}/${dotfile}";
+        };
+      })
+      |> builtins.listToAttrs;
+    # {
+    #   ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink p10k-config-file;
+    #   ".config/kitty/kitty.conf".source = config.lib.file.mkOutOfStoreSymlink /Users/michaelmongelli/.config/home-manager/dotfiles/.config/kitty/kitty.conf;
+    # ".config/zed/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${home.homeDirectory}/.config/home-manager/dotfiles/.config/zed/settings.json";
+    # };
+  in
+    nixStoreDotfiles // outOfStoreDotfiles;
 
   /*
-    let
-      p10k = ".p10k.zsh";
-      ghci = ".ghc/ghci.conf";
-    in {
-      # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-      # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-      # # symlink to the Nix store copy.
-      # ".screenrc".source = dotfiles/screenrc;
+  let
+    p10k = ".p10k.zsh";
+    ghci = ".ghc/ghci.conf";
+  in {
+    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+    # # symlink to the Nix store copy.
+    # ".screenrc".source = dotfiles/screenrc;
 
-      # # You can also set the file content immediately.
-      # ".gradle/gradle.properties".text = ''
-      #   org.gradle.console=verbose
-      #   org.gradle.daemon.idletimeout=3600000
-      # '';
+    # # You can also set the file content immediately.
+    # ".gradle/gradle.properties".text = ''
+    #   org.gradle.console=verbose
+    #   org.gradle.daemon.idletimeout=3600000
+    # '';
 
-      ${p10k}.source = ./dotfiles/${p10k};
-      ${ghci}.source = ./dotfiles/${ghci};
-    };
+    ${p10k}.source = ./dotfiles/${p10k};
+    ${ghci}.source = ./dotfiles/${ghci};
+  };
   */
 
   # Home Manager can also manage your environment variables through
@@ -255,7 +258,9 @@ rec {
 
   home.sessionVariables = {
     EDITOR = "nvim";
-    HM = builtins.toString homeManagerDirectory;
+    HOME_MANAGER_DIR = builtins.toString homeManagerDirectory;
+    # BAT_THEME = "gruvbox-dark";
+    # BAT_PAGING = "never";
   };
 
   # Let Home Manager install and manage itself.
@@ -364,7 +369,7 @@ rec {
       "nix"
       "Catppuccin Blur"
     ];
-    extraPackages = [ pkgs.nixd ];
+    extraPackages = [pkgs.nixd];
   };
 
   # programs.neovide = {
@@ -398,6 +403,52 @@ rec {
   #   useTheme = "gruvbox"; # "zash";
   # };
 
+  programs.eza = {
+    enable = true;
+    enableZshIntegration = true;
+    git = true;
+    icons = "auto";
+  };
+
+  programs.bat = {
+    enable = true;
+    config = {
+      style = "plain";
+      paging = "never";
+      theme = "gruvbox-dark";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = pkgs.lib.importTOML ./dotfiles/.config/starship.toml;
+  };
+
+  programs.jq.enable = true;
+
+  programs.htop.enable = true;
+
+  programs.bottom = {
+    enable = true;
+    settings.flags.rate = "250ms";
+    settings.flags.tree = true;
+    settings.flags.temperature_type = "fahrenheit";
+    settings.styles.theme = "gruvbox";
+  };
+
+  # programs.ghostty.enable = true;
+
+  # enable and integrate with command-not-found
+  # programs.nix-index.enable = true;
+
+  programs.ripgrep.enable = true;
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -418,26 +469,28 @@ rec {
     };
 
     plugins = [
-      {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
+      # {
+      #   name = "powerlevel10k";
+      #   src = pkgs.zsh-powerlevel10k;
+      #   file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      # }
     ];
 
-    initExtra =  ''
+    initExtra = ''
       # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
       # Idk how but `p10k configure` does modify the home-manager p10k dotfile
       # even thouhg POWERLEVEL9K_CONFIG_FILE is not set because `source ~/.p10k.zsh` after hm-session-vars.sh
       # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ~/.p10k.zsh
+
+      # UNCOMMENT ME TO ENABLE YOUR P10K THEME
+      # source ~/.p10k.zsh
 
       # Run this command in your terminal to add Homebrew to your PATH:
       eval "$(/opt/homebrew/bin/brew shellenv)"
 
       # ohmyzsh magic-enter config
       MAGIC_ENTER_GIT_COMMAND='git status'
-      MAGIC_ENTER_OTHER_COMMAND='eza -la'
+      MAGIC_ENTER_OTHER_COMMAND='ls -la'
 
       # colored man pages
       export PAGER="less"
@@ -456,14 +509,6 @@ rec {
 
       ## custom utility functions ##
 
-      list-tree () {
-        if [[ "''${1-1}" =~ "[0-9]+" ]]; then   # if first arg is a number
-          eza --tree --level ''${1-1} ''${@:2}  # then treat it as level and include rest of args
-        else                                    # if arg is anything else
-          eza --tree --level 1 $@               # then run args with default level
-        fi
-      }
-
       search-git-log () {
          git log --diff-filter=A -- ''${$1}
       }
@@ -478,6 +523,9 @@ rec {
 
       # sshfs unmount template
       # sshfs <username>@<ip>:/ <username>@<ip>  -o reconnect,volname=<username>,allow_other
+
+      # enable dark mode for ChatGPT desktop app when OS is in dark mode
+      # defaults write com.openai.chat NSRequiresAquaSystemAppearance -bool no
     '';
 
     shellAliases = {
@@ -491,34 +539,31 @@ rec {
           # saybg 'rebuild failed'
         fi
       '';
-      "home" = "${home.sessionVariables.EDITOR} ~/.config/home-manager/home.nix";
-      "flake" = "${home.sessionVariables.EDITOR} ~/.config/home-manager/flake.nix";
-      "nvf" = "${home.sessionVariables.EDITOR} ~/.config/home-manager/modules/nvf/";
-      "gt" = ''
+      "conf" = "${home.sessionVariables.EDITOR} ${homeManagerDirectory}";
+      "gg" = ''
         git log --graph --decorate --color --format="%C(auto)%h%Creset %C(bold blue)%ad%Creset %C(auto)%d%Creset %s" --date=iso $(git rev-list -g --all)
-      ''; # git tree
-      "lg" = "lazygit";
+      ''; # git graph
       "git-count-lines" = "git ls-files | xargs wc -l";
+      "llt" = "eza -lT";
+      "llat" = "eza -laT";
       # "git-log-search" = "search-git-log";
-      "lt" = "list-tree"; # defined in initExtra
-      "la" = "eza -la";
       "nix-shell-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
       "devenv-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
       "ai" = "ollama serve & ollama run llama3.1";
       "ip" = "ipconfig getifaddr en0";
-      "vscat" = "bat -pP --theme='Visual Studio Dark+'";
+      # "vscat" = "bat -pP --theme='Visual Studio Dark+'";
+      # "bat" = "bat -pP --theme='gruvbox-dark'";
       "sshk" = "kitty +kitten ssh";
       "Wireshark" = "sudo '${home.homeDirectory}/Applications/Home Manager Apps/Wireshark.app/Contents/MacOS/Wireshark'";
       "scp-nonstrict" = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
     };
-
   };
 
   programs.git = {
     enable = true;
     userName = "Michael Mongelli";
     userEmail = "mmongelli99@gmail.com";
-    ignores = [ ".DS_Store" ];
+    ignores = [".DS_Store"];
     extraConfig = {
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
@@ -528,5 +573,4 @@ rec {
   programs.gh.enable = true;
 
   programs.lazygit.enable = true;
-
 }

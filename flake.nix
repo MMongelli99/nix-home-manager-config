@@ -19,6 +19,11 @@
     # mac-app-util.url = "github:hraban/mac-app-util";
 
     nvf.url = "github:notashelf/nvf";
+
+    # nix-index-database = {
+    #   url = "github:nix-community/nix-index-database";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
   outputs = {
@@ -28,6 +33,7 @@
     nixpkgs-2505,
     home-manager,
     nvf,
+    # nix-index-database,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -58,6 +64,8 @@
       # the path to your home.nix.
       modules = [
         ./home.nix
+        # nix-index-database.hmModules.nix-index
+        # {programs.nix-index-database.comma.enable = true;}
       ];
 
       # Optionally use extraSpecialArgs to pass arguments through to home.nix
