@@ -405,7 +405,13 @@ in rec {
 
   programs.eza = {
     enable = true;
-    enableZshIntegration = true;
+    enableZshIntegration = false;
+    # zsh integration just enables the following aliases:
+    # ls = "eza"
+    # ll = "eza -l"
+    # la = "eza -a"
+    # lt = "eza --tree"
+    # lla = "eza -la"
     git = true;
     icons = "auto";
   };
@@ -490,7 +496,7 @@ in rec {
 
       # ohmyzsh magic-enter config
       MAGIC_ENTER_GIT_COMMAND='git status'
-      MAGIC_ENTER_OTHER_COMMAND='ls -la'
+      MAGIC_ENTER_OTHER_COMMAND='la'
 
       # colored man pages
       export PAGER="less"
@@ -529,6 +535,14 @@ in rec {
     '';
 
     shellAliases = {
+      # eza
+      ls = "eza -lh --time-style long-iso --git-repos -TL 1";
+      ll = "eza -lh --time-style long-iso --git-repos";
+      la = "eza -lah --time-style long-iso --git-repos -TL 1";
+      lt = "eza -lh --time-style long-iso --git-repos -TL";
+      lat = "eza -lah --time-style long-iso --git-repos -TL";
+      las = "eza -lah --time-style long-iso --git-repos --total-size -TL 1";
+
       # make sure nix-output-monitor is installed for `nom`
       "sw" = ''
         if home-manager switch |& nom; then
@@ -544,8 +558,6 @@ in rec {
         git log --graph --decorate --color --format="%C(auto)%h%Creset %C(bold blue)%ad%Creset %C(auto)%d%Creset %s" --date=iso $(git rev-list -g --all)
       ''; # git graph
       "git-count-lines" = "git ls-files | xargs wc -l";
-      "llt" = "eza -lT";
-      "llat" = "eza -laT";
       # "git-log-search" = "search-git-log";
       "nix-shell-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/af848753e3445e35534932c44e1cb9e7/raw/ef8dd127fec5a2e7bc5eed61e9a35d768b18010e/shell.nix";
       "devenv-init" = "curl -O https://gist.githubusercontent.com/MMongelli99/b2cd34eacfe3ef0f8fd6439afa8c38e3/raw/3716f3324b74083dcfa4c2e2fee29c12956a63be/flake.nix";
